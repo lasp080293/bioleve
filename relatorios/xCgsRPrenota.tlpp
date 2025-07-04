@@ -253,7 +253,7 @@ static function PrNtCabec(cPedido)
     cBitIso:= ""
     cBitSel:= "LOGO_TOPFIVE.BMP"   
 
-    oPrn:Say(040,0700,"ALIMENTOS TIA SONIA",oFont7,100) 
+    oPrn:Say(040,0700,"BIOLEVE - FLAMIN MINERACAO LITDA",oFont7,100) 
     oPrn:Say(120,0760,"PEDIDO Nº - "+cPedido,oFont6,100) 	
     oPrn:SayBitmap(050,044,cBitMap,200,125 ) //700,300
     oPrn:Say(040,2000,"Emissão .: "+ DtoC(Date()),oFont8,100) 
@@ -289,13 +289,13 @@ static function PrNtCabec(cPedido)
     oPrn:Say(0315,2090,ALLTRIM( TRANSFORM(SC5->C5_VOLUME1,"@E 9,999,999.99") ),oFont1,100) 
 
 
-    oPrn:Say(0365,0040,"OBS.MP...:",oFont2,100) 
-    oPrn:Say(0365,1150,"Nº.P/CLI.:",oFont2,100) 
-    oPrn:Say(0365,1850,"Nº.P/MP..:",oFont2,100) 
+    //oPrn:Say(0365,0040,"OBS.MP...:",oFont2,100) 
+    //oPrn:Say(0365,1150,"Nº.P/CLI.:",oFont2,100) 
+    //oPrn:Say(0365,1850,"Nº.P/MP..:",oFont2,100) 
 
-    oPrn:Say(0365,0280, substr(SC5->C5_XMPOBS,1,40)	,oFont1,100) 
-    oPrn:Say(0365,1390,SC5->C5_NPED ,oFont1,100) 
-    oPrn:Say(0365,2090,SC5->C5_XMPNUM,oFont1,100) 
+    //oPrn:Say(0365,0280, substr(SC5->C5_XMPOBS,1,40)	,oFont1,100) 
+    //oPrn:Say(0365,1390,SC5->C5_NPED ,oFont1,100) 
+    //oPrn:Say(0365,2090,SC5->C5_XMPNUM,oFont1,100) 
 
 
     oPrn:Say(0415,0040,"Municip.:",oFont2,100) 

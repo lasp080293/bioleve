@@ -1,0 +1,1399 @@
+#INCLUDE "COLORS.CH"
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑฺฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฟฑฑ
+ฑฑณFun…o    ณ AjustaSX1   ณ Autor ณ Lucas Pereira      ณ Data ณ 19/05/14 ณฑฑ
+ฑฑรฤฤฤฤฤฤฤฤฤฤลฤฤฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤดฑฑ
+ฑฑณDescri…o ณ Ajustar as perguntas no SX1.					              ณฑฑ
+ฑฑรฤฤฤฤฤฤฤฤฤฤลฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤดฑฑ
+ฑฑณSintaxe   ณ AjustaSX1		                                          ณฑฑ
+ฑฑรฤฤฤฤฤฤฤฤฤฤลฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤดฑฑ
+ฑฑณ Uso      ณ RGPR01, Localizacoes...                                    ณฑฑ
+ฑฑภฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤูฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+/*/
+
+//**********************************************************************************************************************************************************************
+//***************************************** INICIO DO RELATORIO DE SEPARAวรO ANALITICA OU SINTETICA LINHA FINAL 425*****************************************************
+//**********************************************************************************************************************************************************************
+
+user function  RCargaMSP()
+
+	private _nLin 	:= 0000
+	private nPag  	:= 1
+	private nTotGPe := 0
+	private nTotGQt := 0
+
+	oPrn:= TMSPrinter():New()
+	oPrn:setPortrait()
+	oPrn:SetPaperSize(9) // A4
+	oPrn:Setup()
+	oPrn:StartPage()
+
+	ImpCabec(oPrn)
+	Detail1(oPrn)
+	Rodape1(oPrn)
+
+	oPrn:EndPage()
+	oPrn:StartPage()
+
+	ImpCabec(oPrn,2)
+	DetGeral(oPrn)
+	Rodape1(oPrn)
+
+	Set Filter to
+	oPrn:EndPage()
+	oPrn:Preview()
+	MS_FLUSH()
+
+return()
+
+//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+//ณ Divisor				                                            																     ณ
+//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู 
+
+STATIC FUNCTION ImpCabec(oPrn,nOpc)
+
+	cBitMap:= "lgrl32.BMP"
+	cBitIso:= ""
+	cBitSel:= "LOGO_TOPFIVE.BMP"
+
+	if nOpc == 2
+		_nLin := 0000
+		nPag  := 1
+	endif
+
+	oPrn:Say(040,0700,"FLAMIN MINERACAO LTDA",oFont7,100)
+	oPrn:Say(120,0430,"SEPARAวรO "+iif(nOpc==2,"SINTE.","ANALI.")+ ZA4->ZA4_CODCAR + " - " + ZA4->ZA4_NOME,oFont6,100)
+	oPrn:SayBitmap(050,044,cBitMap,200,125 ) //700,300
+	oPrn:Say(040,2000,"Emissใo .: "+ DtoC(Date()),oFont8,100)
+	oPrn:Say(080,2000,"Hora      .: "+ Time(),oFont8,100)
+	oPrn:Say(120,2000,"Pแgina   .: "+ StrZero(nPag,2),oFont8,100)
+	oPrn:Box(040+0000,0040,185+0000,2370)
+	oPrn:Box(040+0000,0040,185+0000,1990)
+
+	if nOpc = 2
+		oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+		oPrn:Say(_nLin+0215,0140, "Produto"   	,oFont2,100)
+		oPrn:Say(_nLin+0215,0300, "Descricao"   ,oFont2,100)
+		oPrn:Say(_nLin+0215,1320, "UM"   		,oFont2,100)
+		oPrn:Say(_nLin+0215,1440, "Quant"  ,oFont2,100)
+//		oPrn:Say(_nLin+0215,1750, "Peso"  ,oFont2,100)
+		oPrn:Say(_nLin+0215,1940, "Lote"   		,oFont2,100)
+		_nLin    += 0050
+	endif
+Return()
+
+//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+//ณ Divisor				                                            																     ณ
+//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู 
+
+
+Static Function Detail1(oPrn)
+	LOCAL cCidade := 'XXXXX'
+	LOCAL lTotCid := .F.
+	LOCAL nTotCPe := 0
+	LOCAL nTocCQt := 0
+
+	LOCAL cPedido := 'XXXXX'
+	LOCAL lTotPed := .F.
+	LOCAL nTotPPe := 0
+	LOCAL nTocPQt := 0
+
+	LOCAL cUm	  := 'XX'
+	LOCAL lTotUm  := .F.
+	LOCAL nTotUPe := 0
+	LOCAL nTocUQt := 0
+
+
+	cQuery :=  " SELECT ZA4_TRANSP, "
+	cQuery +=  " 		A4_NOME,  "
+	cQuery +=  " 		A1_EST+'-'+A1_MUN AS MUNICIPIO, "
+	cQuery +=  " 		C5_CLIENTE+'-'+C5_LOJACLI AS CLIENTE, "
+	cQuery +=  " 		SUBSTRING(A1_NOME,1,30) as A1_NOME, "
+	cQuery +=  " 		C5_NUM,  "
+	cQuery +=  " 		C5_FECENT, "
+	cQuery +=  " 		C5_VEND1 + '-'+A3_NOME AS VENDEDOR,   "
+	cQuery +=  " 		C6_PRODUTO, "
+	cQuery +=  " 		C6_DESCRI, "
+	cQuery +=  " 		C6_UM,     "
+	cQuery +=  " 		C6_QTDVEN, "
+	cQuery +=  " 		C6_LOCAL, "
+	cQuery +=  " 		C6_LOCALIZ, "
+	cQuery +=  " 		B1_PESBRU*C6_QTDVEN  as B1_PESBRU"
+	cQuery +=  " FROM "+RETSQLNAME("SC6")+"	 SC6 "
+	cQuery +=  " INNER JOIN "+RETSQLNAME("SC5")+" SC5 ON C5_NUM = C6_NUM AND C5_FILIAL = C6_FILIAL AND SC5.D_E_L_E_T_<> '*'  "
+	cQuery +=  " INNER JOIN "+RETSQLNAME("ZA4")+" ZA4 ON ZA4_CODCAR = C5_XCARGA AND ZA4.D_E_L_E_T_ <> '*' AND ZA4_FILIAL = C6_FILIAL "
+	cQuery +=  " INNER JOIN "+RETSQLNAME("SA1")+" SA1 ON A1_COD = C5_CLIENTE AND A1_LOJA = C5_LOJACLI AND SC5.D_E_L_E_T_ <> '*' "
+	cQuery +=  " INNER JOIN "+RETSQLNAME("SA3")+" SA3 ON A3_COD = C5_VEND1 AND SA3.D_E_L_E_T_ <> '*'  "
+	cQuery +=  " INNER JOIN "+RETSQLNAME("SA4")+" SA4 ON A4_COD = ZA4_TRANSP AND SA4.D_E_L_E_T_ <> '*'  "
+	cQuery +=  " INNER JOIN "+RETSQLNAME("SB1")+" SB1 ON B1_COD = C6_PRODUTO AND SB1.D_E_L_E_T_ <> '*'  "
+	cQuery +=  " WHERE  SC6.D_E_L_E_T_ <> '*' "
+	cQuery +=  " AND ZA4_CODCAR = '"+ZA4->ZA4_CODCAR+"'"
+	cQuery +=  " AND C6_FILIAL = '"+XFILIAL("ZA4")+"'"
+	cQuery +=  " ORDER BY A1_EST+'-'+A1_MUN ,C5_CLIENTE+'-'+C5_LOJACLI ,C5_NUM, C6_UM, C6_DESCRI
+
+	cQuery := ChangeQuery(cQuery)
+	dbUseArea(.T.,"TOPCONN",TcGenQry(,,cQuery),"TMP",.T.,.T.)
+
+	dbSelectArea("TMP")
+	TMP->(DbGotop())
+
+	If TMP->(Eof())
+		MsgInfo("Nao existem registros com o filtro escolhido!")
+		set filter to
+		dbGotop()
+		TMP->(DbCloseArea())
+		Return
+	EndIf
+
+	dbSelectArea("TMP")
+	TMP->(DbGotop())
+	While TMP->(!Eof())
+
+		if cCidade <>  TMP->MUNICIPIO      //cidade
+			if lTotCid
+				_nLin    += 0050
+				oPrn:line(_nLin+210,0040,_nLin+0210,2400)
+				oPrn:Say(_nLin+0215,0040, "Total por Cidade  ---->> " 							 ,oFont2,100)
+				oPrn:Say(_nLin+0215,1140, "Peso -> "+transform(nTocCQt,"@E 999,999,999")         ,oFont2,100)
+				oPrn:Say(_nLin+0215,1540, "Quantidade -> "+transform(nTotCPe,"@E 999,999,999")   ,oFont2,100)
+				_nLin    += 0050
+				nTotCPe  := 0
+				nTocCQt  := 0
+			endif
+			oPrn:line(_nLin+210,0040,_nLin+0210,2400)
+			oPrn:Say(_nLin+0215,0040, TMP->MUNICIPIO    ,oFont2,100)
+			_nLin += 0050
+		ENDIF
+
+		IF cPedido <> TMP->C5_NUM   //pedido
+			if lTotUm
+				oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+				oPrn:Say(_nLin+0215,0140, "Total UM --->>"  					,oFont2,100)
+				oPrn:Say(_nLin+0215,1340, TRANSFORM(nTocUQt,"@E 999,999,999")  	,oFont2,100)
+				oPrn:Say(_nLin+0215,1700, TRANSFORM(nTotUPe,"@E 999,999,999")  	,oFont2,100)
+				_nLin += 0050
+				oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+				nTotUPe := 0
+				nTocUQt := 0
+			endif
+
+			if lTotPed
+				oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+				oPrn:Say(_nLin+0215,0140, "Total por Pedido  ---->> " 							 ,oFont2,100)
+				oPrn:Say(_nLin+0215,1340, transform(nTocPQt,"@E 999,999,999")         ,oFont2,100)
+				oPrn:Say(_nLin+0215,1700, +transform(nTotPPe,"@E 999,999,999")   ,oFont2,100)
+
+				_nLin    += 0050
+				oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+				nTotPPe := 0
+				nTocPQt := 0
+			endif
+
+			_nLin += 0050
+			oBrush1 := TBrush():New( , CLR_LIGHTGRAY )
+			oPrn:FillRect( {_nLin+210,0140,_nLin+210+100,2400}, oBrush1 )
+
+			oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+			oPrn:Say(_nLin+0215,0140, "Cliente.....: " + TMP->CLIENTE+" "+substr(A1_NOME,1,40) 	,oFont2,100)
+			oPrn:Say(_nLin+0215,1440, "Pedido...: " + TMP->C5_NUM   				,oFont2,100)
+			_nLin += 0050
+			oPrn:Say(_nLin+0215,0140, "Data Limite.: " + dtoc(stod(TMP->C5_FECENT)) ,oFont2,100)
+			oPrn:Say(_nLin+0215,1440, "Vendedor.: " + TMP->VENDEDOR                 ,oFont2,100)
+			_nLin += 0050
+
+			oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+			oPrn:Say(_nLin+0215,0140, "Prod."   	,oFont2,100)
+			oPrn:Say(_nLin+0215,0300, "Descricao"   ,oFont2,100)
+			oPrn:Say(_nLin+0215,1320, "UM"   		,oFont2,100)
+
+			oPrn:Say(_nLin+0215,1460, "Quant"  ,oFont2,100)
+			oPrn:Say(_nLin+0215,1630, "Peso"  ,oFont2,100)
+			oPrn:Say(_nLin+0215,1790, "Endere็o"  ,oFont2,100)
+			oPrn:Say(_nLin+0215,1950, "Ar"   		,oFont2,100)
+			oPrn:Say(_nLin+0215,2020, "Lote"   		,oFont2,100)
+			lTotUm := .F.
+			_nLin += 0050
+		endif
+		/*
+		if cUm <> TMP->C6_UM  //unidade de medida
+			if lTotUm
+				oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+				oPrn:Say(_nLin+0215,0140, "Total UM --->>"  					,oFont2,100)
+				oPrn:Say(_nLin+0215,1340, TRANSFORM(nTocUQt,"@E 999,999,999")  	,oFont2,100)
+				oPrn:Say(_nLin+0215,1540, TRANSFORM(nTotUPe,"@E 999,999.999")  	,oFont2,100)
+				_nLin += 0050
+				oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+				nTotUPe := 0
+				nTocUQt := 0
+			endif
+		endif
+		*/
+		oPrn:Say(_nLin+0215,0140, TMP->C6_PRODUTO   							,oFont3,100)
+		oPrn:Say(_nLin+0215,0300, substr(TMP->C6_DESCRI,1,50)   								,oFont3,100)
+		oPrn:Say(_nLin+0215,1320, TMP->C6_UM   	   								,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1340, TRANSFORM(TMP->C6_QTDVEN,"@E 999,999,999")   	,oFont3,100)
+		//oPrn:Say(_nLin+0215,1540, TRANSFORM(TMP->B1_PESBRU,"@E 999,999.999")  	,oFont3,100)
+		oPrn:Say(_nLin+0215,1790, TMP->C6_LOCALIZ  	,oFont3,100)
+		oPrn:Say(_nLin+0215,1950, TMP->C6_LOCAL  	   								,oFont3,100)
+		oPrn:Say(_nLin+0215,2020, ""			,oFont3,100)
+
+		_nLin += 0050
+
+		nTotCPe += TMP->B1_PESBRU
+		nTocCQt += TMP->C6_QTDVEN
+		nTotUPe += TMP->B1_PESBRU
+		nTocUQt += TMP->C6_QTDVEN
+		nTotGPe += TMP->B1_PESBRU
+		nTotGQt += TMP->C6_QTDVEN
+		nTotPPe += TMP->B1_PESBRU
+		nTocPQt += TMP->C6_QTDVEN
+
+		cUm 	:= TMP->C6_UM
+		cPedido := TMP->C5_NUM
+		cCidade := TMP->MUNICIPIO
+		lTotUm  := .T.
+		lTotPed := .T.
+		lTotCid := .T.
+
+
+		TMP->(DBSKIP())
+		If _nLin > 2600
+			oPrn:Say(_nLin+0300,1600,"Continua na pr๓xima pแgina ---->>>>"       ,oFont8,100)
+			_nLin := 0000
+			nPag  := nPag+1
+			oPrn:EndPage()
+			oPrn:StartPage()
+			ImpCabec(oPrn)//IMPRIME CABECALHO
+		Endif
+	ENDDO
+
+	if lTotUm   //total unidade de medida
+		oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+		oPrn:Say(_nLin+0215,0140, "Total UM --->>"  					,oFont2,100)
+		oPrn:Say(_nLin+0215,1340, TRANSFORM(nTocUQt,"@E 999,999,999")  	,oFont2,100)
+		oPrn:Say(_nLin+0215,1540, TRANSFORM(nTotUPe,"@E 999,999,999")  	,oFont2,100)
+		_nLin += 0050
+		oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+		nTotUPe := 0
+		nTocUQt := 0
+	endif
+
+	if lTotPed   //total pedido
+		oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+		oPrn:Say(_nLin+0215,0140, "Total por Pedido  ---->> " 							 ,oFont2,100)
+		oPrn:Say(_nLin+0215,1340, transform(nTocPQt,"@E 999,999,999")         ,oFont2,100)
+		oPrn:Say(_nLin+0215,1540, +transform(nTotPPe,"@E 999,999,999")   ,oFont2,100)
+		_nLin    += 0050
+		oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+	endif
+
+	if lTotCid    //total ciadade
+		_nLin    += 0050
+		oBrush1 := TBrush():New( , CLR_LIGHTGRAY )
+		oPrn:FillRect( {_nLin+210,0040,_nLin+210+050,2400}, oBrush1 )
+		oPrn:line(_nLin+210,0040,_nLin+0210,2400)
+		oPrn:Say(_nLin+0215,0040, "Total por Cidade  ---->> " 							 ,oFont2,100)
+		oPrn:Say(_nLin+0215,1140, "Peso -> "+transform(nTocCQt,"@E 999,999,999")         ,oFont2,100)
+		oPrn:Say(_nLin+0215,1600, "Quant -> "+transform(nTotCPe,"@E 999,999,999")   ,oFont2,100)
+		_nLin    += 0050
+	endif
+
+
+	TMP->(DbCloseArea())
+Return()
+
+Static Function DetGeral(oPrn)
+	local cUm   	:= "XX"
+	local lUm   	:= .F.
+	local nTotUQt   := 0
+	local nTotUPe   := 0
+
+	cQuery1 :=  " SELECT  C6_PRODUTO,
+	cQuery1 +=  " 		C6_DESCRI,
+	cQuery1 +=  " 		C6_UM,
+	cQuery1 +=  " 		SUM(C6_QTDVEN) as C6_QTDVEN,
+	cQuery1 +=  " 		SUM(B1_PESBRU) as B1_PESBRU
+	cQuery1 +=  " FROM "+RETSQLNAME("SC6")+"	 SC6
+	cQuery1 +=  " INNER JOIN "+RETSQLNAME("SC5")+" SC5 ON C5_NUM = C6_NUM AND C5_FILIAL = C6_FILIAL AND SC5.D_E_L_E_T_<> '*'
+	cQuery1 +=  " INNER JOIN "+RETSQLNAME("SB1")+" SB1 ON B1_COD = C6_PRODUTO AND SB1.D_E_L_E_T_ <> '*'
+	cQuery1 +=  " WHERE  SC6.D_E_L_E_T_ <> '*'
+	cQuery1 +=  " AND C6_FILIAL = '"+XFILIAL("SC6")+"'"
+	cQuery1 +=  " AND C5_XCARGA = '"+ZA4->ZA4_CODCAR+"'"
+
+	cQuery1 +=  " GROUP BY C6_PRODUTO,
+	cQuery1 +=  " 		C6_DESCRI,
+	cQuery1 +=  " 		C6_LOCAL,
+	cQuery1 +=  " 		C6_LOCALIZ,
+	cQuery1 +=  " 		C6_UM
+	cQuery1 +=  " ORDER BY C6_UM, C6_DESCRI
+
+
+	cQuery1 := ChangeQuery(cQuery1)
+	dbUseArea(.T.,"TOPCONN",TcGenQry(,,cQuery1),"SQL",.T.,.T.)
+
+	dbSelectArea("SQL")
+	SQL->(DbGotop())
+
+	If SQL->(Eof())
+		MsgInfo("Nao existem registros com o filtro escolhido!")
+		set filter to
+		dbGotop()
+		SQL->(DbCloseArea())
+		Return
+	EndIf
+
+	dbSelectArea("SQL")
+	SQL->(DbGotop())
+	While SQL->(!Eof())
+		/*
+		IF cUm <> SQL->C6_UM
+			if lUm
+				oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+				oPrn:Say(_nLin+0215,0140, "Total da Unidad de Medida -->>"     			,oFont2,100)
+				oPrn:Say(_nLin+0215,1340, TRANSFORM(nTotUQt,"@E 999,999,999")   	,oFont2,100)
+				oPrn:Say(_nLin+0215,1700, TRANSFORM(nTotUPe,"@E 999,999.999")  	,oFont2,100)
+				_nLin    += 0050
+				oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+				nTotUQt   := 0
+				nTotUPe   := 0
+			endif
+		ENDIF
+		*/
+		//_nLin    += 0050
+		oPrn:Say(_nLin+0215,0140, SQL->C6_PRODUTO   							,oFont8,100)
+		oPrn:Say(_nLin+0215,0300, substr(SQL->C6_DESCRI,1,58)   				,oFont8,100)
+		oPrn:Say(_nLin+0215,1320, SQL->C6_UM   	   								,oFont8,100)
+		oPrn:Say(_nLin+0215,1420, TRANSFORM(SQL->C6_QTDVEN,"@E 999,999,999")   	,oFont8,100)
+		//oPrn:Say(_nLin+0215,1700, TRANSFORM(SQL->B1_PESBRU,"@E 999,999.999")  	,oFont8,100)
+		oPrn:Say(_nLin+0215,1940, ""			,oFont8,100)
+		_nLin    += 0050
+		oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+		_nLin    += 0050
+
+
+		nTotUQt += SQL->C6_QTDVEN
+		nTotUPe += SQL->B1_PESBRU
+		lUm 	:= .T.
+		cUm     := SQL->C6_UM
+
+		SQL->(DBSKIP())
+		If _nLin > 3000
+			oPrn:Say(_nLin+0300,1200,"Continua na pr๓xima pแgina ---->>>>"       ,oFont8,100)
+			_nLin := 0000
+			nPag  := nPag+1
+			oPrn:EndPage()
+			oPrn:StartPage()
+			ImpCabec(oPrn,2)//IMPRIME CABECALHO
+		Endif
+	ENDDO
+/*
+	if lUm
+		oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+		oPrn:Say(_nLin+0215,0140, "Total da Unidad de Medida -->>"     			,oFont2,100)
+		oPrn:Say(_nLin+0215,1340, TRANSFORM(nTotUQt,"@E 999,999,999")   	,oFont2,100)
+		//oPrn:Say(_nLin+0215,1700, TRANSFORM(nTotUPe,"@E 999,999,999")  	,oFont2,100)
+		_nLin    += 0050
+		oPrn:line(_nLin+210,0140,_nLin+0210,2400)
+	endif
+*/
+	SQL->(DbCloseArea())
+Return()
+
+
+//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+//ณ Divisor				                                            																     ณ
+//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู 
+Static Function Rodape1(oPrn)
+	oBrush1 := TBrush():New( , CLR_LIGHTGRAY )
+	oPrn:FillRect( {_nLin+210,0040,_nLin+210+050,2400}, oBrush1 )
+
+	oPrn:line(_nLin+210,0040,_nLin+0210,2400)
+
+	oPrn:Say(_nLin+0215,0040, "Total Geral -->>"     		                             	,oFont2,100)
+	oPrn:Say(_nLin+0215,1040, "Quantidade ->> " + TRANSFORM(nTotGQt,"@E 999,999,999")   	,oFont2,100)
+	oPrn:Say(_nLin+0215,1640, "Peso Bruto ->> " + TRANSFORM(nTotGPe,"@E 999,999,999")  	    ,oFont2,100)
+
+	_nLin    += 0050
+	oPrn:line(_nLin+210,0040,_nLin+0210,2400)
+
+return()
+
+
+//***********************************************************************************************************************************************************************
+//********************************** FIM DO RELATORIO DE SEPARAวรO ANALITICA OU SINTETICA LINHA INICIAL 001 FINAL 425 ***************************************************
+//***********************************************************************************************************************************************************************
+
+/*/
+	ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+	ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+	ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+	ฑฑบPrograma  ณXROMANEIO บ Autor ณ Lucas Santos          บ Data ณ  28/01/15บฑฑ
+	ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+	ฑฑบDescricao ณ RELATORIO DE VENDAS POR CANAL DE VENDA                     บฑฑ
+	ฑฑบ          ณ                                                            บฑฑ
+	ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+	ฑฑบUso       ณ AP6 IDE                                                    บฑฑ
+	ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+	ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+	฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+/*/              
+
+//**********************************************************************************************************************************************
+//************************************ INICIO DO RELATORIO DE ROMANEIO  LINHA INICIAL 451 LINHA FINAL 756 **************************************
+//**********************************************************************************************************************************************
+
+User Function XROMANEIO()
+
+	private	oPrn
+
+	private nTotPbr 	   := 0
+	private nTotVol		   := 0
+	private nTotVlr		   := 0
+	private nTotVlf        := 0
+	private ntotchapa      := 0
+	private ntotpalete     := 0
+	private lExecRel       := .T.
+	private NPAG           := 1
+	private nContadorNotas := 0
+
+	if  ZA4->ZA4_STATUS $ 'ACLEZ'
+		MsgInfo("Impossivel imprimir romeneio de uma carga nao faturada")
+		return()
+	endif
+
+	oPrn:= TMSPrinter():New()
+	oPrn:setPortrait()
+	oPrn:SetPaperSize(9) // A4
+	oPrn:Setup()
+	oPrn:StartPage()
+
+	cQuery :=  " select "
+	cQuery +=  " ZA5_NFISCA,"
+	cQuery +=  " ZA5_SERIE,   "
+	cQuery +=  " ZA5_PEDIDO,  "
+	cQuery +=  " ZA5_CLIENT, "
+	cQuery +=  " ZA5_LOJA, "
+	cQuery +=  " ZA5_NOME,    "
+	cQuery +=  " ZA5_VLRNF,   "
+	cQuery +=  " ZA5_CIDADE,  "
+	cQuery +=  " ZA5_TOTFRE, "
+	cQuery +=  " C5_XNFOMIE , "
+	cQuery +=  " 	(select  "
+	cQuery +=  " 	 count(*) "
+	cQuery +=  " 	 from "+RETSQLNAME("SE1")+ " SE1"
+	cQuery +=  " 	 where E1_NUM = ZA5_NFISCA "
+	cQuery +=  " 	 and E1_PREFIXO = ZA5_SERIE"
+	cQuery +=  "     and SE1.D_E_L_E_T_ <> '*')"
+	cQuery +=  " as NUM_PARCELAS, "
+	cQuery +=  " ZA5_PESOBR, "
+	cQuery +=  " ZA5_QTDVOL "
+	cQuery +=  " from "+RETSQLNAME("ZA5")+ " ZA5"
+	cQuery +=  " inner join "+RETSQLNAME("SC5")+ " SC5 on SC5.D_E_L_E_T_ <> '*' AND C5_FILIAL = ZA5_FILIAL AND C5_NUM = ZA5_PEDIDO "
+	cQuery +=  " where ZA5_CODCAR = '"+ZA4->ZA4_CODCAR+"'"
+	cQuery +=  " and ZA5.D_E_L_E_T_ <> '*'"
+	cQuery +=  " AND ZA5_FILIAL = '"+XFILIAL("ZA5")+"'"
+	cQuery +=  " ORDER BY ZA5_NFISCA "
+
+	cQuery := ChangeQuery(cQuery)
+	dbUseArea(.T.,"TOPCONN",TcGenQry(,,cQuery),"TMP",.T.,.T.)
+
+	dbSelectArea("TMP")
+	TMP->(DbGotop())
+
+	If TMP->(Eof())
+		MsgInfo("Nao existem registros com o filtro escolhido!")
+		set filter to
+		dbGotop()
+		TMP->(DbCloseArea())
+		Return
+	EndIf
+
+	CabecRom(oPrn)
+	DetailRom(oPrn)
+	RodapeRom(oPrn)
+
+	Set Filter to
+	oPrn:EndPage()
+	oPrn:Preview()
+	MS_FLUSH()
+	TMP->(DbCloseArea())
+Return()
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณImpress   บAutor  ณMicrosiga           บ Data ณ  20/05/25   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ     INICIO DA IMPRESSีES                                   บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ AP                                                         บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+STATIC FUNCTION CabecRom(oPrn)
+
+	LOCAL cCodMoto := POSICIONE("DA3",1,XFILIAL("DA3")+ ZA4->ZA4_VEICUL,"DA3_MOTORI")
+	local cNomMoto := POSICIONE("DA4",1,XFILIAL("DA4")+ cCodMoto ,"DA4_NOME")
+	local cNomCgc  := POSICIONE("DA4",1,XFILIAL("DA4")+ cCodMoto ,"DA4_CGC")
+	local cNomRg   := POSICIONE("DA4",1,XFILIAL("DA4")+ cCodMoto ,"DA4_RG")
+	local cDescCgc := ""
+	local cStatus  := ""
+	_nLin := 0000
+	cBitMap:= "lgrl32.BMP"
+	cBitIso:= ""
+	cBitSel:= "LOGO_TOPFIVE.BMP"
+
+
+	oPrn:Say(040,0700,"FLAMIN MINERACAO LTDA",oFont7,100)
+	oPrn:Say(120,0690,"ROMANEIO DA CARGA "+ZA4->ZA4_CODCAR,oFont6,100)
+	oPrn:SayBitmap(050,044,cBitMap,200,125 ) //700,300
+	oPrn:Say(040,2000,"Emissใo .: "+ DtoC(Date()),oFont8,100)
+	oPrn:Say(080,2000,"Hora      .: "+ Time(),oFont8,100)
+	oPrn:Say(120,2000,"Pแgina   .: "+ StrZero(nPag,2),oFont8,100)
+	oPrn:Box(040+0000,0040,185+0000,2370)
+	oPrn:Box(040+0000,0040,185+0000,1990)
+
+	IF lExecRel
+		IF LEN(ALLTRIM(cNomCgc)) == 11 .OR. EMPTY(cNomCgc)
+			cDescCgc := "CPF.: "
+			cNomCgc := TRANSFORM(ALLTRIM(cNomCgc),"@R 999.999.999-99")
+		else
+			cDescCgc := "CNPJ.: "
+			cNomCgc  :=	 TRANSFORM(ALLTRIM(cNomCgc),"@R 99.999.999/9999-99")
+		endif
+
+		IF ZA4->ZA4_STATUS == 'A'
+			cStatus :=	'EM SEPARACAO'
+		ELSEIF ZA4->ZA4_STATUS == 'C'
+			cStatus :=	'EM CONFERENCIA'
+		ELSEIF ZA4->ZA4_STATUS == 'L'
+			cStatus :=	'LIBERADA PARA FATURAMENTO'
+		ELSEIF ZA4->ZA4_STATUS == 'F'
+			cStatus :=	'FATURADA'
+		ELSEIF ZA4->ZA4_STATUS == 'E'
+			cStatus :=	'EXPEDIDA'
+		ELSEIF ZA4->ZA4_STATUS == 'P'
+			cStatus :=	'ENTREGA PARCIAL'
+		ELSEIF ZA4->ZA4_STATUS == 'T'
+			cStatus :=	'FINALIZADA'
+		ELSEIF ZA4->ZA4_STATUS == 'Z'
+			cStatus :=	'CANCELADA'
+		ENDIF
+
+		oPrn:Say(_nLin+0215,0040,"NOM.CAR.: ",oFont8,100)
+		oPrn:Say(_nLin+0215,0240,ZA4->ZA4_NOME ,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,"STS.CAR.: ",oFont8,100)
+		oPrn:Say(_nLin+0215,1400,cStatus ,oFont3,100)
+
+		_nLin += 0050
+
+		oPrn:Say(_nLin+0215,0040,"TRANSPO.: ",oFont8,100)
+		oPrn:Say(_nLin+0215,0240,ZA4->ZA4_TRANSP + " - " +ZA4->ZA4_NOMTRA ,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,"OP.LOG.: ",oFont8,100)
+		oPrn:Say(_nLin+0215,1400,ZA4->ZA4_OPLOGI + " - "	+ZA4->ZA4_NOMOPL,oFont3,100)
+
+		_nLin += 0050
+
+		oPrn:Say(_nLin+0215,0040,"VEICULO.: "		,oFont8,100)
+		oPrn:Say(_nLin+0215,0240,ZA4->ZA4_VEICUL  	,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,"PLACA.: " 		,oFont8,100)
+		oPrn:Say(_nLin+0215,1400,ZA4->ZA4_PLACA  	,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1800,"CAPACI.: "  							 ,oFont8,100)
+		oPrn:Say(_nLin+0215,2000,TRANSFORM(ZA4->ZA4_CAPACI,"@E 999,999,999") ,oFont3,100)
+
+		_nLin += 0050
+
+		oPrn:Say(_nLin+0215,0040,"MOTORI.: " ,oFont8,100)
+		oPrn:Say(_nLin+0215,0240,cCodMoto + " - " + cNomMoto  ,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,cDescCgc ,oFont8,100)
+		oPrn:Say(_nLin+0215,1400,cNomCgc  ,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1800,"RG.: " ,oFont8,100)
+		oPrn:Say(_nLin+0215,2000,cNomRg ,oFont3,100)
+
+		_nLin += 0100
+
+		oBrush1 := TBrush():New( , CLR_LIGHTGRAY )
+		oPrn:FillRect( {_nLin+210,0040,_nLin+210+050,2370}, oBrush1 )
+		oPrn:line(_nLin+210,0040,_nLin+0210,2370)
+		oPrn:Say(_nLin+0215,1350,"ITENS DA CARGA " ,oFont8,100)
+		_nLin += 0050
+		oPrn:line(_nLin+210,0040,_nLin+0210,2370)
+		lExecRel := .F.
+	endif
+
+	oPrn:Say(_nLin+0215,0040,"N.FISCAL",oFont8,100)
+	oPrn:Say(_nLin+0215,0320,"TIPO PAG.",oFont8,100)
+	oPrn:Say(_nLin+0215,0670,"PED",oFont8,100)
+	oPrn:Say(_nLin+0215,0830,"CLIENTE",oFont8,100)
+	oPrn:Say(_nLin+0215,1280,"MUNICIPIO",oFont8,100)
+	oPrn:Say(_nLin+0215,1650,"C.MUN",oFont8,100)
+	//oPrn:Say(_nLin+0215,1650,"N.PARC",oFont8,100)
+	oPrn:Say(_nLin+0215,1820,"VAL.NF",oFont8,100)
+	//oPrn:Say(_nLin+0215,1800,"VAL.FRT",oFont8,100)
+	oPrn:Say(_nLin+0215,2020,"P.BRUT",oFont8,100)
+	oPrn:Say(_nLin+0215,2200,"VOLUME",oFont8,100)
+
+
+Return()
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณImpress   บAutor  ณMicrosiga           บ Data ณ  20/05/25   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ     INICIO DA IMPRESSีES                                   บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ AP                                                         บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function DetailRom(oPrn)
+	_nLin += 0050
+	dbSelectArea("TMP")
+	TMP->(DbGotop())
+
+//	nContadorNotas := 0
+	
+	While TMP->(!Eof())
+		cEst 	:= POSICIONE("SA1",1,XFILIAL("SA1")+TMP->(ZA5_CLIENT+ZA5_LOJA),"A1_EST")
+		cCodMun := POSICIONE("SA1",1,XFILIAL("SA1")+TMP->(ZA5_CLIENT+ZA5_LOJA),"A1_COD_MUN")
+
+		oPrn:Say(_nLin+0215,0040,TMP->ZA5_SERIE + TMP->ZA5_NFISCA		  		 ,oFont3,100)
+		//oPrn:Say(_nLin+0215,0320,TMP->C5_TIPOP2		  						     ,oFont3,100)
+		oPrn:Say(_nLin+0215,0670,TMP->ZA5_PEDIDO		 					   	 ,oFont3,100)
+		oPrn:Say(_nLin+0215,0830,TMP->ZA5_CLIENT+"-"+substr(TMP->ZA5_NOME,1,14)	 ,oFont3,100)
+		oPrn:Say(_nLin+0215,1280,ALLTRIM(SUBSTR(TMP->ZA5_CIDADE,1,20))+"/"+cEst	 ,oFont3,100)
+		oPrn:Say(_nLin+0215,1650,  cCodMun		                                 ,oFont3,100)
+		//oPrn:Say(_nLin+0215,1670,cvaltochar(TMP->NUM_PARCELAS)			 	 ,oFont3,100)
+		oPrn:Say(_nLin+0215,1720,TRANSFORM(TMP->ZA5_VLRNF,"@E 9,999,999.99")	 ,oFont3,100)
+		//oPrn:Say(_nLin+0215,1920,TRANSFORM(TMP->ZA5_TOTFRET,"@E 9,999,999.99") ,oFont3,100)
+		oPrn:Say(_nLin+0215,1920,TRANSFORM(TMP->ZA5_PESOBR,"@E 9,999,999.99")	 ,oFont3,100)
+		oPrn:Say(_nLin+0215,2120,TRANSFORM(TMP->ZA5_QTDVOL,"@E 9,999,999.99") 	 ,oFont3,100)
+
+		nTotPbr    += TMP->ZA5_PESOBR
+		nTotVol    += TMP->ZA5_QTDVOL
+		nTotVlr    += TMP->ZA5_VLRNF
+		nTotVlf    += TMP->ZA5_TOTFRE
+		nContadorNotas++ // ? AQUI INCREMENTAMOS O CONTADOR
+
+		_nLin += 0050
+
+		TMP->(DBSKIP())
+		If _nLin > 2900
+			oPrn:Say(_nLin+0300,1200,"Continua na pr๓xima pแgina ---->>>>"       ,oFont8,100)
+			_nLin := 0000
+			nPag  := nPag+1
+			oPrn:EndPage()
+			oPrn:StartPage()
+			CabecRom(oPrn)//IMPRIME CABECALHO
+		Endif
+	ENDDO
+Return
+
+Static Function RodapeRom(oPrn)
+
+	_nLin += 0050
+	oPrn:line(_nLin+210,0040,_nLin+0210,2370)
+	_nLin += 0050
+
+	oPrn:Say(_nLin+0210,0050,"Totais --->>",oFont8,100)
+	oPrn:Say(_nLin+0210,0200,"Qtd Notas: " + Str(nContadorNotas)  ,oFont8, 100) // Quantidade total de nota do romaneio
+	oPrn:Say(_nLin+0210,1500,transform(nTotVlr,"@E 9,999,999.99") ,oFont8,100) // Total do Valor da nota fiscal Bruto
+	oPrn:Say(_nLin+0210,1700,transform(nTotVlf,"@E 9,999,999.99") ,oFont8,100) // Total do Valor do frete
+ 	oPrn:Say(_nLin+0210,1900,transform(nTotPbr,"@E 9,999,999.99") ,oFont8,100) // Total do peso bruto da carga
+	oPrn:Say(_nLin+0210,2100,transform(nTotVol,"@E 9,999,999.99") ,oFont8,100) // Total de Volumes carregados 
+	oPrn:Say(_nLin+0210,2260,transform(XCHAPA ,"@E 9,999,999.99") ,oFont8,100) // Total de Chapatex
+	oPrn:Say(_nLin+0210,2400,transform(XPALETE,"@E 9,999,999.99") ,oFont8,100) // Total de paletes
+	_nLin += 0250
+
+	oPrn:line(_nLin+210,0400,_nLin+0210,1000)
+	oPrn:line(_nLin+210,1200,_nLin+0210,1800)
+
+	oPrn:Say(_nLin+0210,0500,"Motorista",oFont8,100)
+	oPrn:Say(_nLin+0210,1300,"Conferente",oFont8,100)
+RETURN()
+
+
+//**********************************************************************************************************************************************
+//************************************ FIM DO RELATORIO DE ROMANEIO  LINHA INICIAL 451 LINHA FINAL 756 *****************************************
+//**********************************************************************************************************************************************
+
+
+/*/
+	ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+	ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+	ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+	ฑฑบPrograma  ณXPRECONROM บ Autor ณ Lucas Santos         บ Data ณ  28/01/15บฑฑ
+	ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+	ฑฑบDescricao ณ RELATORIO PRESTACAO DE CONTAS - ROMANEIO                   บฑฑ
+	ฑฑบ          ณ                                                            บฑฑ
+	ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+	ฑฑบUso       ณ AP6 IDE                                                    บฑฑ
+	ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+	ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+	฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+/*/              
+//************************************************** RELATORIO DE CARGA FATURADA ***********************************************************
+User Function XPRECONROM()
+
+	private	oPrn
+
+	private nTotPbr 	   := 0
+	private nTotVol		   := 0
+	private nTotVlr		   := 0
+	private nContadorNotas :=0
+	private nTotVlf        := 0
+	private ntotchapa      := 0
+	private ntotpalete     := 0
+	private lExecRel := .T.
+	private NPAG := 1
+
+	if  ZA4->ZA4_STATUS $ 'ACLEZ'
+		MsgInfo("Impossivel imprimir romeneio de uma carga nao faturada")
+		return()
+	endif
+
+
+	oPrn:= TMSPrinter():New()
+	oPrn:setLandscape()
+	oPrn:SetPaperSize(9) // A4
+	oPrn:Setup()
+	oPrn:StartPage()
+
+
+	cQuery :=  " select "
+	cQuery +=  " ZA5_NFISCA,"
+	cQuery +=  " ZA5_SERIE,   "
+	cQuery +=  " ZA5_PEDIDO,  "
+	cQuery +=  " ZA5_CLIENT, "
+	cQuery +=  " ZA5_NOME,    "
+//	cQuery +=  " ZA5_VLRNF,   "
+	cQuery +=  " (SELECT F2_VALBRUT "
+	cQuery +=  "  FROM " + RETSQLNAME("SF2") + " SF2 "
+	cQuery +=  "  WHERE SF2.F2_DOC = ZA5.ZA5_NFISCA "
+	cQuery +=  "    AND SF2.D_E_L_E_T_ <> '*') AS ZA5_VLRNF,"
+	cQuery +=  " ZA5_CIDADE,  "
+	cQuery +=  " ZA5_TOTFRE, "
+	cQuery +=  " 	(select  "
+	cQuery +=  " 	 count(*) "
+	cQuery +=  " 	 from "+RETSQLNAME("SE1")+ " SE1"
+	cQuery +=  " 	 where E1_NUM = ZA5_NFISCA "
+	cQuery +=  " 	 and E1_PREFIXO = ZA5_SERIE"
+	cQuery +=  "     and SE1.D_E_L_E_T_ <> '*')"
+	cQuery +=  " as NUM_PARCELAS, "
+	cQuery +=  " 	(SELECT TOP(1) E4_DESCRI   "
+	cQuery +=  "	 FROM "+RETSQLNAME("SE4")+ " SE4 "
+	cQuery +=  "	 inner join "+RETSQLNAME("SC5")
+	cQuery +=  "	 on C5_CONDPAG = E4_CODIGO   "
+	cQuery +=  "	 where C5_NUM = ZA5_PEDIDO   "
+	cQuery +=  "     and SE4.D_E_L_E_T_ <> '*')"
+	cQuery +=  " as TIPO_PAG, "
+	cQuery +=  "  	(SELECT TOP (1) C5_TIPOP2 " //SC5 COND PAG
+	cQuery +=  "   	FROM " + RETSQLNAME("SC5") + " SC5 "
+	cQuery +=  "  	WHERE C5_NUM = ZA5_PEDIDO "
+	cQuery +=  "     AND SC5.D_E_L_E_T_ <> '*')"
+	cQuery +=  " as COND_PAG,"
+	cQuery +=  "  (SELECT TOP (1) C5_XCHAPA " //SC5 CHAPA
+	cQuery +=  "  	FROM " + RETSQLNAME("SC5") + " SC5 "
+	cQuery +=  "  	WHERE SC5.C5_NUM = ZA5_PEDIDO "
+	cQuery +=  "     AND D_E_L_E_T_ <> '*') AS XCHAPA,"
+	cQuery +=  "  (SELECT TOP (1) C5_XPALETE " //SC5 PALETE
+	cQuery +=  "  	FROM " + RETSQLNAME("SC5") + " SC5 "
+	cQuery +=  "   	WHERE C5_NUM = ZA5_PEDIDO "
+	cQuery +=  "     AND SC5.D_E_L_E_T_ <> '*') AS XPALETE, "
+	cQuery +=  " ZA5_DTEXPE, "
+	cQuery +=  " ZA5_PESOBR, "
+	cQuery +=  " ZA5_QTDVOL "
+	cQuery +=  " from "+RETSQLNAME("ZA5")+ " ZA5"
+	cQuery +=  " where ZA5_CODCAR = '"+ZA4->ZA4_CODCAR+"'"
+	cQuery +=  " and ZA5.D_E_L_E_T_ <> '*'"
+	cQuery +=  " ORDER BY ZA5_NFISCA "
+
+	cQuery := ChangeQuery(cQuery)
+	dbUseArea(.T.,"TOPCONN",TcGenQry(,,cQuery),"TMP",.T.,.T.)
+
+	dbSelectArea("TMP")
+	TMP->(DbGotop())
+
+	If TMP->(Eof())
+		MsgInfo("Nao existem registros com o filtro escolhido!")
+		set filter to
+		dbGotop()
+		TMP->(DbCloseArea())
+		Return
+	EndIf
+
+	CabecRelRo(oPrn)
+	DetailRelRo(oPrn)
+	RodapeRelRo(oPrn)
+
+	Set Filter to
+	oPrn:EndPage()
+	oPrn:Preview()
+	MS_FLUSH()
+	TMP->(DbCloseArea())
+Return()
+
+/*/
+	ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+	ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+	ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+	ฑฑบPrograma  ณImpress   บAutor  ณMicrosiga           บ Data ณ  20/05/25   บฑฑ
+	ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+	ฑฑบDesc.     ณ     INICIO DA IMPRESSีES                                   บฑฑ
+	ฑฑบ          ณ                                                            บฑฑ
+	ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+	ฑฑบUso       ณ AP                                                         บฑฑ
+	ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+	ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+	฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+/*/
+
+STATIC FUNCTION CabecRelRo(oPrn)
+
+	LOCAL cCodMoto := POSICIONE("DA3",1,XFILIAL("DA3")+ZA4->ZA4_VEICUL,"DA3_MOTORI")
+	local cNomMoto := POSICIONE("DA4",1,XFILIAL("DA4")+ cCodMoto ,"DA4_NOME")
+	local cNomCgc  := POSICIONE("DA4",1,XFILIAL("DA4")+ cCodMoto ,"DA4_CGC")
+	local cNomRg   := POSICIONE("DA4",1,XFILIAL("DA4")+ cCodMoto ,"DA4_RG")
+	local cDescCgc := ""
+	local cStatus  := ""
+	_nLin := 0000
+	cBitMap:= "lgrl32.BMP"
+	cBitIso:= ""
+	cBitSel:= "LOGO_TOPFIVE.BMP"
+
+	oPrn:setLandscape()
+	oPrn:Say(040,0700,"FLAMIN MINERACAO LTDA",oFont7,100)
+	oPrn:Say(120,0690,"ROMANEIO - CARGA " + ZA4->ZA4_CODCAR + " - " + ZA4->ZA4_NOME, oFont6, 100)
+	oPrn:SayBitmap(050,044,cBitMap,200,125 ) //700,300
+	oPrn:Say(040,2800,"Emissใo .: "+ DtoC(Date()),oFont8,100)
+	oPrn:Say(080,2800,"Hora      .: "+ Time(),oFont8,100)
+	oPrn:Say(120,2800,"Pแgina   .: "+ StrZero(nPag,2),oFont8,100)
+	oPrn:Box(040+0000,0040,185+0000,3400)
+	oPrn:Box(040+0000,0040,185+0000,2790)
+
+	IF lExecRel
+		IF LEN(ALLTRIM(cNomCgc)) == 11 .OR. EMPTY(cNomCgc)
+			cDescCgc := "CPF.: "
+			cNomCgc := TRANSFORM(ALLTRIM(cNomCgc),"@R 999.999.999-99")
+		else
+			cDescCgc := "CNPJ.: "
+			cNomCgc  :=	 TRANSFORM(ALLTRIM(cNomCgc),"@R 99.999.999/9999-99")
+		endif
+
+		IF ZA4->ZA4_STATUS == 'A'
+			cStatus :=	'EM SEPARACAO'
+		ELSEIF ZA4->ZA4_STATUS == 'C'
+			cStatus :=	'EM CONFERENCIA'
+		ELSEIF ZA4->ZA4_STATUS == 'L'
+			cStatus :=	'LIBERADA PARA FATURAMENTO'
+		ELSEIF ZA4->ZA4_STATUS == 'F'
+			cStatus :=	'FATURADA'
+		ELSEIF ZA4->ZA4_STATUS == 'E'
+			cStatus :=	'EXPEDIDA'
+		ELSEIF ZA4->ZA4_STATUS == 'P'
+			cStatus :=	'ENTREGA PARCIAL'
+		ELSEIF ZA4->ZA4_STATUS == 'T'
+			cStatus :=	'FINALIZADA'
+		ELSEIF ZA4->ZA4_STATUS == 'Z'
+			cStatus :=	'CANCELADA'
+		ENDIF
+
+		oPrn:Say(_nLin+0215,0040,"NOM.CAR.: ",oFont8,100)
+		oPrn:Say(_nLin+0215,0240,ZA4->ZA4_NOME ,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,"STS.CAR.: ",oFont8,100)
+		oPrn:Say(_nLin+0215,1400,cStatus ,oFont3,100)
+
+		_nLin += 0050
+
+		oPrn:Say(_nLin+0215,0040,"TRANSPO.: ",oFont8,100)
+		oPrn:Say(_nLin+0215,0240,ZA4->ZA4_TRANSP + " - " +ZA4->ZA4_NOMTRA ,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,"OP.LOG.: ",oFont8,100)
+		oPrn:Say(_nLin+0215,1400,ZA4->ZA4_OPLOGI + " - "	+ZA4->ZA4_NOMOPL,oFont3,100)
+
+		_nLin += 0050
+
+		oPrn:Say(_nLin+0215,0040,"VEICULO.: "		,oFont8,100)
+		oPrn:Say(_nLin+0215,0240,ZA4->ZA4_VEICUL  	,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,"PLACA.: " 		,oFont8,100)
+		oPrn:Say(_nLin+0215,1400,ZA4->ZA4_PLACA  	,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1800,"CAPACI.: "  							 ,oFont8,100)
+		oPrn:Say(_nLin+0215,2000,TRANSFORM(ZA4->ZA4_CAPACI,"@E 999,999,999") ,oFont3,100)
+
+		_nLin += 0050
+
+		oPrn:Say(_nLin+0215,0040,"MOTORI.: " ,oFont8,100)
+		oPrn:Say(_nLin+0215,0240,cCodMoto + " - " + cNomMoto  ,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,cDescCgc ,oFont8,100)
+		oPrn:Say(_nLin+0215,1400,cNomCgc  ,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1800,"RG.: " ,oFont8,100)
+		oPrn:Say(_nLin+0215,2000,cNomRg ,oFont3,100)
+
+		_nLin += 0100
+
+		oBrush1 := TBrush():New( , CLR_LIGHTGRAY )
+		oPrn:FillRect( {_nLin+210,0040,_nLin+210+050,3400}, oBrush1 )
+		oPrn:line(_nLin+210,0040,_nLin+0210,3400)
+		oPrn:Say(_nLin+0215,1000,"ITENS DA CARGA " ,oFont8,100)
+		_nLin += 0050
+		oPrn:line(_nLin+210,0040,_nLin+0210,3400)
+		lExecRel := .F.
+	endif
+
+	oPrn:Say(_nLin+0215,0040,"N.FISCAL",oFont8,100)
+	oPrn:Say(_nLin+0215,0350,"PEDIDO",oFont8,100)
+	oPrn:Say(_nLin+0215,0550,"CLIENTE",oFont8,100)
+	oPrn:Say(_nLin+0215,1050,"MUNICIPIO",oFont8,100)
+	oPrn:Say(_nLin+0215,1380,"COND. PAG",oFont8,100)
+	oPrn:Say(_nLin+0215,1560,"VAL.NF BR.",oFont8,100)
+	oPrn:Say(_nLin+0215,1730,"VAL.FRT",oFont8,100)
+	oPrn:Say(_nLin+0215,1930,"P.BRUT",oFont8,100)
+	oPrn:Say(_nLin+0215,2110,"VOLUME",oFont8,100)
+	oPrn:Say(_nLin+0215,2310,"CHAPA",oFont8,100)
+	oPrn:Say(_nLin+0215,2500,"PALETE",oFont8,100)
+	oPrn:Say(_nLin+0215,2750,"DEV. CHAPA",oFont8,100)
+	oPrn:Say(_nLin+0215,3130,"DEV. PALETE",oFont8,100)
+	_nLin += 50
+
+Return()
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณImpress   บAutor  ณMicrosiga           บ Data ณ  20/05/25   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ     INICIO DA IMPRESSีES                                   บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ AP                                                         บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function DetailRelRo(oPrn)
+	_nLin += 0050
+	dbSelectArea("TMP")
+	TMP->(DbGotop())
+
+	While TMP->(!Eof())
+
+
+		oPrn:Say(_nLin+0215,0040,TMP->ZA5_SERIE + TMP->ZA5_NFISCA		  		    ,oFont3,100)
+		oPrn:Say(_nLin+0215,0350,TMP->ZA5_PEDIDO		 					   		,oFont3,100)
+		oPrn:Say(_nLin+0215,0550,TMP->ZA5_CLIENT+"-"+substr(TMP->ZA5_NOME,1,15)   	,oFont3,100)
+		oPrn:Say(_nLin+0215,1050,SUBSTR(TMP->ZA5_CIDADE,1,20)					    ,oFont3,100)
+		oPrn:Say(_nLin+0215,1400,TMP->COND_PAG			 					        ,oFont3,100)
+		oPrn:Say(_nLin+0215,1480,TRANSFORM(TMP->ZA5_VLRNF,"@E 9,999,999.99")	   	,oFont3,100)
+		oPrn:Say(_nLin+0215,1630,TRANSFORM(TMP->ZA5_TOTFRE,"@E 9,999,999.99") 	    ,oFont3,100)
+		oPrn:Say(_nLin+0215,1820,TRANSFORM(TMP->ZA5_PESOBR,"@E 9,999,999.99")	    ,oFont3,100)
+		oPrn:Say(_nLin+0215,2010,TRANSFORM(TMP->ZA5_QTDVOL,"@E 9,999,999.99") 	    ,oFont3,100)
+		oPrn:Say(_nLin+0215,2250,TRANSFORM(TMP->XCHAPA,"@E 9,999,999.99") 	        ,oFont3,100)
+		oPrn:Say(_nLin+0215,2450,TRANSFORM(TMP->XPALETE,"@E 9,999,999.99") 	        ,oFont3,100)
+		oPrn:Say(_nLin+0215,2740,"                         |"  	                    ,oFont3,100)
+		oPrn:Say(_nLin+0215,3000,""						                            ,oFont3,100)
+	
+		nTotPbr       += TMP->ZA5_PESOBR
+		nTotVol       += TMP->ZA5_QTDVOL
+		nTotVlr       += TMP->ZA5_VLRNF
+		nTotVlf       += TMP->ZA5_TOTFRE
+		ntotchapa     += TMP->XCHAPA
+		ntotpalete    += TMP->XPALETE
+		nContadorNotas++ // ? AQUI INCREMENTAMOS O CONTADOR
+		_nLin += 0050
+
+		TMP->(DBSKIP())
+		If _nLin > 1800
+			oPrn:Say(_nLin+0300,1200,"Continua na pr๓xima pแgina ---->>>>"       ,oFont8,100)
+			_nLin := 0200
+			nPag  := nPag+1
+			oPrn:EndPage()
+			oPrn:StartPage()
+			CabecRelRo(oPrn)//IMPRIME CABECALHO
+		Endif
+	ENDDO
+Return
+
+
+/*/
+	ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+	ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+	ฑฑฺฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฟฑฑ
+	ฑฑณFun…o    ณ AjustaSX1   ณ Autor ณ Lucas Pereira      ณ Data ณ 19/05/14 ณฑฑ
+	ฑฑรฤฤฤฤฤฤฤฤฤฤลฤฤฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤดฑฑ
+	ฑฑณDescri…o ณ Ajustar as perguntas no SX1.					              ณฑฑ
+	ฑฑรฤฤฤฤฤฤฤฤฤฤลฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤดฑฑ
+	ฑฑณSintaxe   ณ AjustaSX1		                                          ณฑฑ
+	ฑฑรฤฤฤฤฤฤฤฤฤฤลฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤดฑฑ
+	ฑฑณ Uso      ณ RGPR01, Localizacoes...                                    ณฑฑ
+	ฑฑภฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤูฑฑ
+	ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+	฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+/*/
+Static Function RodapeRelRo(oPrn)
+
+	_nLin += 0050
+	oPrn:line(_nLin+210,0040,_nLin+0210,3400)
+	_nLin += 0050
+
+	oPrn:Say(_nLin+0210,0050,"Totais --->>",oFont8,100)
+	oPrn:Say(_nLin+0210,0200,"Qtd Notas: " + Str(nContadorNotas), oFont8, 100)
+	oPrn:Say(_nLin+0210,1550,transform(nTotVlr,"@E 9,999,999.99")    ,oFont8,100) // Total dos valores das notas impressas
+	oPrn:Say(_nLin+0210,1750,transform(nTotVlf,"@E 9,999,999.99")    ,oFont8,100) // Total dos valores de fretes impressos
+	oPrn:Say(_nLin+0210,1950,transform(nTotPbr,"@E 9,999,999.99")    ,oFont8,100) // Total do peso bruto das notas impressas
+	oPrn:Say(_nLin+0210,2150,transform(nTotVol,"@E 9,999,999.99")    ,oFont8,100) // Total do volume da carga
+	oPrn:Say(_nLin+0210,2350,transform(ntotchapa,"@E 9,999,999.99")  ,oFont8,100) // Total de Chapatex impressos na carga
+	oPrn:Say(_nLin+0210,2450,transform(ntotpalete,"@E 9,999,999.99") ,oFont8,100) // Total de palete da carga 
+	_nLin += 050
+
+	oPrn:Say(_nLin+0210,0050,"VALOR DO ALUGUEL",oFont8,100)
+	_nLin += 030
+	oPrn:line(_nLin+210,0900,_nLin+0210,1500)
+	_nLin += 020
+
+	oPrn:Say(_nLin+0210,0050,"TOTAL DE KM RODADOS",oFont8,100)
+	_nLin += 030
+	oPrn:line(_nLin+210,0900,_nLin+0210,1500)
+	_nLin += 020
+
+	oPrn:Say(_nLin+0210,0050,"VALOR DESPESAS COM HOTEL" ,oFont8,100)
+	_nLin += 030
+	oPrn:line(_nLin+210,0900,_nLin+0210,1500)
+	_nLin += 020
+
+	oPrn:Say(_nLin+0210,0050,"VALOR DESPESAS COM PEDAGIO" ,oFont8,100)
+	_nLin += 030
+	oPrn:line(_nLin+210,0900,_nLin+0210,1500)
+	_nLin += 020
+
+	oPrn:Say(_nLin+0210,0050,"VALOR DESPESAS COM DESCARREGO" ,oFont8,100)
+	_nLin += 030
+	oPrn:line(_nLin+210,0900,_nLin+0210,1500)
+	_nLin += 020
+
+	oPrn:Say(_nLin+0210,0050,"VALOR DESPESAS COM COMBUSTIVEL" ,oFont8,100)
+	_nLin += 030
+	oPrn:line(_nLin+210,0900,_nLin+0210,1500)
+	_nLin += 020
+
+	oPrn:Say(_nLin+0210,0050,"VALOR POR CAIXA" ,oFont8,100)
+	_nLin += 030
+	oPrn:line(_nLin+210,0900,_nLin+0210,1500)
+	_nLin += 020
+
+	oPrn:Say(_nLin+0210,0050,"CUSTO TOTAL DA VIAGEM" ,oFont8,100)
+	_nLin += 030
+	oPrn:line(_nLin+210,0900,_nLin+0210,1500)
+	_nLin += 0270
+
+	oPrn:line(_nLin+210,0400,_nLin+0210,1000)
+	oPrn:line(_nLin+210,1200,_nLin+0210,1800)
+
+	oPrn:Say(_nLin+0210,0500,"Motorista",oFont8,100)
+	oPrn:Say(_nLin+0210,1300,"Conferente",oFont8,100)
+RETURN()
+
+
+/*/
+	ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+	ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+	ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+	ฑฑบPrograma  ณXROMANEIO บ Autor ณ Lucas Santos          บ Data ณ  28/01/15บฑฑ
+	ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+	ฑฑบDescricao ณ RELATORIO DE VENDAS POR CANAL DE VENDA                     บฑฑ
+	ฑฑบ          ณ                                                            บฑฑ
+	ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+	ฑฑบUso       ณ AP6 IDE                                                    บฑฑ
+	ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+	ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+	฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+/*/              
+//************************************************** RELATORIO DE ACOMPANHAMETO DE ENTREGA ***********************************************************
+User Function XENTREGAS()
+
+	private	oPrn
+	private lExecRel := .T.
+	private NPAG := 1
+
+	if  ZA4->ZA4_STATUS $ 'ACLEZ'
+		MsgInfo("Impossivel imprimir Acompanhamento de entrega. Verifique o Status da carga!")
+		return()
+	endif
+
+
+	oPrn:= TMSPrinter():New()
+	oPrn:setPortrait()
+	oPrn:SetPaperSize(9) // A4
+	oPrn:Setup()
+	oPrn:StartPage()
+
+
+	cQuery :=  " select "
+	cQuery +=  " ZA5_NFISCA,"
+	cQuery +=  " ZA5_SERIE,   "
+	cQuery +=  " ZA5_CLIENT, "
+	cQuery +=  " ZA5_NOME,    "
+	cQuery +=  " ZA5_DTPEDI, "
+	cQuery +=  " ZA5_DTEXPE, "
+	cQuery +=  " ZA5_PRVENT, "
+	cQuery +=  " ZA5_DTENTR, "
+	cQuery +=  " ZA5_DTAGEN, "
+	cQuery +=  " ZA5_CIDADE, "
+	cQuery +=  " ZA5_DESEMP , "
+	cQuery +=  " ZA5_STSCAN, "
+	cQuery +=  " ZA5_HISTOR, "
+	cQuery +=  " ZA5_STSENT, "
+	cQuery +=  " ZA5_JUSTFI "
+	cQuery +=  " from "+RETSQLNAME("ZA5")+ " ZA5"
+	cQuery +=  " where ZA5_CODCAR = '"+ZA4->ZA4_CODCAR+"'"
+	cQuery +=  " and ZA5.D_E_L_E_T_ <> '*'"
+
+	cQuery := ChangeQuery(cQuery)
+	dbUseArea(.T.,"TOPCONN",TcGenQry(,,cQuery),"TMP",.T.,.T.)
+
+	dbSelectArea("TMP")
+	TMP->(DbGotop())
+
+	If TMP->(Eof())
+		MsgInfo("Nao existem registros com o filtro escolhido!")
+		set filter to
+		dbGotop()
+		TMP->(DbCloseArea())
+		Return
+	EndIf
+
+	CabecEnt(oPrn)
+	DetailEnt(oPrn)
+
+	Set Filter to
+	oPrn:EndPage()
+	oPrn:Preview()
+	MS_FLUSH()
+	TMP->(DbCloseArea())
+Return()
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณImpress   บAutor  ณMicrosiga           บ Data ณ  20/05/25   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ     INICIO DA IMPRESSีES                                   บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ AP                                                         บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+STATIC FUNCTION CabecEnt(oPrn)
+	LOCAL oBrush1  := TBrush():New( , CLR_LIGHTGRAY )
+	LOCAL cCodMoto := POSICIONE("DA3",1,XFILIAL("DA3")+ZA4->ZA4_VEICUL,"DA3_MOTORI")
+	local cNomMoto := POSICIONE("DA4",1,XFILIAL("DA4")+ cCodMoto ,"DA4_NOME")
+	local cNomCgc  := POSICIONE("DA4",1,XFILIAL("DA4")+ cCodMoto ,"DA4_CGC")
+	local cNomRg   := POSICIONE("DA4",1,XFILIAL("DA4")+ cCodMoto ,"DA4_RG")
+	local cDescCgc := ""
+	local cStatus  := ""
+	_nLin := 0000
+	cBitMap:= "lgrl32.BMP"
+	cBitIso:= ""
+	cBitSel:= "LOGO_TOPFIVE.BMP"
+
+
+	oPrn:Say(040,0700,"FLAMIN MINERACAO LTDA",oFont7,100)
+	oPrn:Say(120,0490,"ACOMPANHAMENTO DE ENTREGA DA CARGA "+ZA4->ZA4_CODCAR,oFont6,100)
+	oPrn:SayBitmap(050,044,cBitMap,200,125 ) //700,300
+	oPrn:Say(040,2000,"Emissใo .: "+ DtoC(Date()),oFont8,100)
+	oPrn:Say(080,2000,"Hora      .: "+ Time(),oFont8,100)
+	oPrn:Say(120,2000,"Pแgina   .: "+ StrZero(nPag,2),oFont8,100)
+	oPrn:Box(040+0000,0040,185+0000,2370)
+	oPrn:Box(040+0000,0040,185+0000,1990)
+
+	IF lExecRel
+		IF LEN(ALLTRIM(cNomCgc)) == 11 .OR. EMPTY(cNomCgc)
+			cDescCgc := "CPF.: "
+			cNomCgc := TRANSFORM(ALLTRIM(cNomCgc),"@R 999.999.999-99")
+		else
+			cDescCgc := "CNPJ.: "
+			cNomCgc  :=	 TRANSFORM(ALLTRIM(cNomCgc),"@R 99.999.999/9999-99")
+		endif
+
+		IF ZA4->ZA4_STATUS == 'A'
+			cStatus :=	'EM SEPARACAO'
+		ELSEIF ZA4->ZA4_STATUS == 'C'
+			cStatus :=	'EM CONFERENCIA'
+		ELSEIF ZA4->ZA4_STATUS == 'L'
+			cStatus :=	'LIBERADA PARA FATURAMENTO'
+		ELSEIF ZA4->ZA4_STATUS == 'F'
+			cStatus :=	'FATURADA'
+		ELSEIF ZA4->ZA4_STATUS == 'E'
+			cStatus :=	'EXPEDIDA'
+		ELSEIF ZA4->ZA4_STATUS == 'P'
+			cStatus :=	'ENTREGA PARCIAL'
+		ELSEIF ZA4->ZA4_STATUS == 'T'
+			cStatus :=	'FINALIZADA'
+		ELSEIF ZA4->ZA4_STATUS == 'Z'
+			cStatus :=	'CANCELADA'
+		ENDIF
+
+		oPrn:Say(_nLin+0215,0040,"NOM.CAR.: ",oFont8,100)
+		oPrn:Say(_nLin+0215,0240,ZA4->ZA4_NOME ,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,"STS.CAR.: ",oFont8,100)
+		oPrn:Say(_nLin+0215,1400,cStatus ,oFont3,100)
+
+		_nLin += 0050
+
+		oPrn:Say(_nLin+0215,0040,"TRANSPO.: ",oFont8,100)
+		oPrn:Say(_nLin+0215,0240,ZA4->ZA4_TRANSP + " - " +ZA4->ZA4_NOMTRA ,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,"OP.LOG.: ",oFont8,100)
+		oPrn:Say(_nLin+0215,1400,ZA4->ZA4_OPLOGI + " - "	+ZA4->ZA4_NOMOPL,oFont3,100)
+
+		_nLin += 0050
+
+		oPrn:Say(_nLin+0215,0040,"VEICULO.: "		,oFont8,100)
+		oPrn:Say(_nLin+0215,0240,ZA4->ZA4_VEICUL  	,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,"PLACA.: " 		,oFont8,100)
+		oPrn:Say(_nLin+0215,1400,ZA4->ZA4_PLACA  	,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1800,"CAPACI.: "  							 ,oFont8,100)
+		oPrn:Say(_nLin+0215,2000,TRANSFORM(ZA4->ZA4_CAPACI,"@E 999,999,999") ,oFont3,100)
+
+		_nLin += 0050
+
+		oPrn:Say(_nLin+0215,0040,"MOTORI.: " ,oFont8,100)
+		oPrn:Say(_nLin+0215,0240,cCodMoto + " - " + cNomMoto  ,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,cDescCgc ,oFont8,100)
+		oPrn:Say(_nLin+0215,1400,cNomCgc  ,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1800,"RG.: " ,oFont8,100)
+		oPrn:Say(_nLin+0215,2000,cNomRg ,oFont3,100)
+
+		_nLin += 0100
+
+		oPrn:FillRect( {_nLin+210,0040,_nLin+210+050,2370}, oBrush1 )
+		oPrn:line(_nLin+210,0040,_nLin+0210,2370)
+		oPrn:Say(_nLin+0215,1000,"ITENS DA CARGA " ,oFont8,100)
+		_nLin += 0050
+		oPrn:line(_nLin+210,0040,_nLin+0210,2370)
+		lExecRel := .F.
+	endif
+
+Return()
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณImpress   บAutor  ณMicrosiga           บ Data ณ  20/05/25   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ     INICIO DA IMPRESSีES                                   บฑฑ
+ฑฑบ          ณ                                                            บฑฑ
+ฑฑฬออออออออออุออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออนฑฑ
+ฑฑบUso       ณ AP                                                         บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function DetailEnt(oPrn)
+	LOCAL oBrush2  := TBrush():New( , RGB(255,0,0) )
+
+	dbSelectArea("TMP")
+	TMP->(DbGotop())
+
+	While TMP->(!Eof())
+
+		IF ALLTRIM(TMP->ZA5_STSENT) == "Devolvida"
+			oPrn:FillRect( {_nLin+210,0040,_nLin+210+250,2370}, oBrush2 )
+		ENDIF
+		oPrn:Say(_nLin+0215,0040,"N.FISCAL.: ",oFont8,100)
+		oPrn:Say(_nLin+0215,0240, TMP->ZA5_SERIE	+ TMP->ZA5_NFISCA 	  	,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,"EMIS.PED",oFont8,100)
+		oPrn:Say(_nLin+0215,1400,DTOC(STOD(TMP->ZA5_DTPEDI))		 		,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1800,"PREV.ENT",oFont8,100)
+		oPrn:Say(_nLin+0215,2000,DTOC(STOD(TMP->ZA5_PRVENT))					,oFont3,100)
+
+		_nLin += 0050
+
+		oPrn:Say(_nLin+0215,0040,"CLIENTE.:",oFont8,100)
+		oPrn:Say(_nLin+0215,0240,TMP->ZA5_CLIENT+"-"+substr(TMP->ZA5_NOME,1,15)	,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,"DT.EXPED",oFont8,100)
+		oPrn:Say(_nLin+0215,1400,DTOC(STOD(TMP->ZA5_DTEXPE))		  		,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1800,"DT.AGEND",oFont8,100)
+		oPrn:Say(_nLin+0215,2000,DTOC(STOD(TMP->ZA5_DTAGEN))					,oFont3,100)
+
+		_nLin += 0050
+
+		oPrn:Say(_nLin+0215,0040,"MUNICIP",oFont8,100)
+		oPrn:Say(_nLin+0215,0240,substr(TMP->ZA5_CIDADE,1,25)   	  			,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,"DT.ENTRE",oFont8,100)
+		oPrn:Say(_nLin+0215,1400,DTOC(STOD(TMP->ZA5_DTENTR))		  		,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1800,"DESEM",oFont8,100)
+		oPrn:Say(_nLin+0215,2000,TMP->ZA5_DESEMP				   			,oFont3,100)
+
+		_nLin += 0050
+
+		oPrn:Say(_nLin+0215,0040,"HISTOR.:",oFont8,100)
+		oPrn:Say(_nLin+0215,0240,TMP->ZA5_HISTOR				   			,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1200,"STS.CANH",oFont8,100)
+		oPrn:Say(_nLin+0215,1400,TMP->ZA5_STSCAN				   	  		,oFont3,100)
+
+		oPrn:Say(_nLin+0215,1800,"STS.ENT",oFont8,100)
+		oPrn:Say(_nLin+0215,2000,TMP->ZA5_STSENT				   			,oFont3,100)
+
+		_nLin += 0050
+
+		oPrn:Say(_nLin+0215,0040,"JUSTIF.:",oFont8,100)
+		oPrn:Say(_nLin+0215,0240,TMP->ZA5_JUSTFI				   			,oFont3,100)
+
+		_nLin += 0100
+		oPrn:line(_nLin+210,0040,_nLin+0210,2370)
+
+		TMP->(DBSKIP())
+		If _nLin > 3000
+			oPrn:Say(_nLin+0300,1200,"Continua na pr๓xima pแgina ---->>>>"       ,oFont8,100)
+			_nLin := 0050
+			nPag  := nPag+1
+			oPrn:EndPage()
+			oPrn:StartPage()
+			CabecEnt(oPrn)//IMPRIME CABECALHO
+		Endif
+	ENDDO
+Return

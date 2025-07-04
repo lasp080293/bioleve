@@ -178,7 +178,7 @@ STATIC FUNCTION detailCorte(oPrn,nOpc)
                 C6_XUSRCOR
         
         
-        FROM SC6010 SC6, SB1010 SB1, SA1010 SA1
+        FROM SC6320 SC6, SB1320 SB1, SA1320 SA1
         
         WHERE C6_XCORTE = 'S'
         AND A1_COD = C6_CLI

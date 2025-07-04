@@ -5,8 +5,8 @@
 User Function xCgsRota()
 
     Private cCadastro:='Cadastro de Rotas"
-    Private cAlias1:= "SZ4"
-    Private cAlias2:= "SZ5"
+    Private cAlias1:= "ZA1"
+    Private cAlias2:= "ZA2"
     Private aRotina:= {}
     PRIVATE aCores := {}
 
@@ -30,8 +30,8 @@ User Function xCgsRota()
 
     //Executar a função mBrowse para a tabela mencionada
 
-    aAdd(aCores, { "Z4_VEND <> '000032' ", 'BR_VERDE'})
-    aAdd(aCores, { "Z4_VEND =  '000032' ", 'BR_PRETO'})
+    aAdd(aCores, { "ZA1_VEND <> '000032' ", 'BR_VERDE'})
+    aAdd(aCores, { "ZA1_VEND =  '000032' ", 'BR_PRETO'})
 
     mBrowse(,,,,cAlias1,,,,,,aCores)
 
@@ -41,8 +41,8 @@ return
 User Function xCgMd3Rota(cAlias,nRecno,nOpc)
     //Declaração de Variaveis
 
-    Local cLinok := "ValidLin"
-    Local cTudook := "md3tudok"
+    Local cLinok := "allwaystrue"
+    Local cTudook := "u_md3tudok"
     Local nOpce := nopc
     Local nOpcg := nopc
     Local cFieldok := "allwaystrue"
@@ -161,8 +161,8 @@ Static function CriaCols(nOpc)
         
         dbselectarea(cAlias2)
         dbsetorder(1)
-        dbseek(xfilial(cAlias2)+(cAlias1)->Z4_CODROT)
-        while .not. eof() .and. (cAlias2)->Z5_filial == xfilial(cAlias2) .and. (cAlias2)->Z5_CODROT==(cAlias1)->Z4_CODROT
+        dbseek(xfilial(cAlias2)+(cAlias1)->ZA1_CODROT)
+        while .not. eof() .and. (cAlias2)->ZA2_filial == xfilial(cAlias2) .and. (cAlias2)->ZA2_CODROT==(cAlias1)->ZA1_CODROT
             aAdd(aCols,array(nQtdcpo+1))
             nCols++
             for i:= 1 to nQtdcpo
@@ -221,9 +221,9 @@ Static Function GrvDados()
             
             nItem++
             
-            (cAlias2)->Z5_filial 	:= xfilial(cAlias2)
-            (cAlias2)->Z5_CODROT 	:= (cAlias1)->Z4_CODROT
-            (cAlias2)->Z5_item 	:= strzero(nItem,4,0)
+            (cAlias2)->ZA2_filial 	:= xfilial(cAlias2)
+            (cAlias2)->ZA2_CODROT 	:= (cAlias1)->ZA1_CODROT
+            (cAlias2)->ZA2_item 	:= strzero(nItem,4,0)
             
             Msunlock()
             
@@ -276,9 +276,9 @@ Static Function Altdados()
                 for y:= 1 to len(aHeader)
                     Fieldput(Fieldpos(trim(aHeader[y,2])),aCols[i,y])
                 next y
-                (cAlias2)->Z5_filial := xfilial(calias2)
-                (cAlias2)->Z5_CODROT := (cAlias1)->Z4_CODROT
-                (cAlias2)->Z5_item := strzero(nItem,4,0)
+                (cAlias2)->ZA2_filial := xfilial(calias2)
+                (cAlias2)->ZA2_CODROT := (cAlias1)->ZA1_CODROT
+                (cAlias2)->ZA2_item := strzero(nItem,4,0)
                 Msunlock()
                 nItem++			
             endif
@@ -295,8 +295,8 @@ Static Function Excluidados()
     procregua(len(aCols)+1)
     dbselectarea(cAlias2)
     dbsetorder(1)
-    dbseek(xfilial(cAlias2)+(cAlias1)->Z4_CODROT)
-    do while .not. eof() .and. (cAlias2)->Z5_FILIAL == xfilial(cAlias2) .and. (cAlias2)->Z5_CODROT==(cAlias1)->Z4_CODROT
+    dbseek(xfilial(cAlias2)+(cAlias1)->ZA1_CODROT)
+    do while .not. eof() .and. (cAlias2)->ZA2_FILIAL == xfilial(cAlias2) .and. (cAlias2)->ZA2_CODROT==(cAlias1)->ZA1_CODROT
         incproc()
         
         Reclock(cAlias2,.F.)
@@ -318,25 +318,6 @@ Static Function Excluidados()
 return
 
 
-static function Md3TudOk()
-    Local lRet:= .T.
-    Local i:=0
-    Local nDel :=0
-
-    for i:=1 to len(aCols)
-        if aCols[i,len(aHeader)+1]
-            nDel++
-        endif
-    next
-
-    if nDel == len(aCols)
-        Msginfo("Para excluir todos os itens, utilize a opção EXCLUIR",cCadastro)
-        lRet := .F.
-    endif
-return(lRet)
-
-
-
 /******************************************
  * LEGENDAS                               *
 /******************************************/
@@ -354,19 +335,19 @@ Return .T.
 static function ValidLin() 
     LOCAL nRet 		:= .T.  
     LOCAL rArea	  	:= GETAREA() 
-    local cChave 	:= ACOLS[N,2]+ACOLS[N,3]+ACOLS[N,5]   
+    local cChave 	:= ACOLS[N,2]+ACOLS[N,3]+ACOLS[N,5]
 
     local cMsg		:= ''
 
-    if M->Z4_TIPO == '3'
+    if M->ZA1_TIPO == '3'
         RETURN .T.
     endif
 
     if empty(aCols[N,2])
-        cMsg += "Z5_EST - Estado"+ENTER
+        cMsg += "ZA2_EST - Estado"+ENTER
     endif
     if empty(aCols[N,3])
-        cMsg += "Z5_CODMUN - Código do Município"+ENTER
+        cMsg += "ZA2_CODMUN - Código do Município"+ENTER
     endif
 
     if !empty(cMsg)
@@ -374,24 +355,24 @@ static function ValidLin()
         return(.F.)
     endif
             
-    IF M->Z4_BAIRRO == 'S' .AND. EMPTY(ACOLS[N,5])
+    IF M->ZA1_BAIRRO == 'S' .AND. EMPTY(ACOLS[N,5])
         MSGINFO("Para rotas que consideram bairro é necessario informar o campo BAIRRO")
         nRet := .F. 
     ENDIF            
 
-    cQuery := " select  Z5_CODROT AS CODROT from  "+RETSQLNAME("SZ5") 		  
+    cQuery := " select  ZA2_CODROT AS CODROT from  "+RETSQLNAME("ZA2") 		  
     cQuery += "  where D_E_L_E_T_ <> '*' 
 
-    IF M->Z4_BAIRRO == 'S'     
-        cQuery += "	and Z5_EST+Z5_CODMUN+Z5_CODBAIR = '"+alltrim(cChave)+"'"  
+    IF M->ZA1_BAIRRO == 'S'     
+        cQuery += "	and ZA2_EST+ZA2_CODMUN+ZA2_CODBAIR = '"+alltrim(cChave)+"'"  
     else          
-        cQuery += "	and Z5_EST+Z5_CODMUN = '"+substr(alltrim(cChave),1,7)+"'" 
+        cQuery += "	and ZA2_EST+ZA2_CODMUN = '"+substr(alltrim(cChave),1,7)+"'" 
     endif     
 
     ChangeQuery(cQuery)
     dbUseArea(.T.,"TOPCONN",TcGenQry(,,cQuery),"TM1",.T.,.T.)    
 
-    if !EMPTY(TM1->CODROT).and. TM1->CODROT <> M->Z4_CODROT  .and. !acols[n,len(aheader)+1]
+    if !EMPTY(TM1->CODROT).and. TM1->CODROT <> M->ZA1_CODROT  .and. !acols[n,len(aheader)+1]
         ALERT("REGISTRO PERTENCE A ROTA "+TM1->CODROT+".Verifique!")   
         nRet := .F. 	
     endif  
@@ -399,3 +380,29 @@ static function ValidLin()
     TM1->(DbCloseArea()) 
     restarea(rArea)
 return(nRet)
+
+
+
+
+//Criando a função Md3TudOk
+//Rotina de Cadastro para a tabela SZ1
+//Cadastro de Software.
+//Função Md3TudOk
+//Descrição da Função para validar se a getdados está liberada para gravar os dados conforme o preenchimento
+
+User function Md3TudOk()
+    Local lRet:= .T.
+    Local i:=0
+    Local nDel :=0
+
+    for i:=1 to len(aCols)
+        if aCols[i,len(aHeader)+1]
+            nDel++
+        endif
+    next
+
+    if nDel == len(aCols)
+        Msginfo("Para excluir todos os itens, utilize a opção EXCLUIR",cCadastro)
+        lRet := .F.
+    endif
+return(lRet)

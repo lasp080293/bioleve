@@ -1,0 +1,765 @@
+#INCLUDE "Protheus.ch"
+#INCLUDE "fwbrowse.ch"
+
+#DEFINE ENTER CHR(13)+CHR(10)
+
+
+
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡…o    ³ xCargas      ³ Autor ³ Lucas Pereira      ³ Data ³ 19/05/15 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡…o ³ Ajustar as perguntas no SX1.					              ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe   ³ AjustaSX1		                                          ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ RGPR01, Localizacoes...                                    ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/               
+
+User Function xCgsCad() 
+    Private cCadastro := "Cargas"
+    Private aCores	  := {}
+    Private aRotina   := {}
+    private aRotina1  := {}
+    private aRotina2  := {}  
+    private aRotina3  := {} 
+    private aRotina4  := {} 
+    Private cDelFunc  := ".T." // Validacao para a exclusao. Pode-se utilizar ExecBlock
+    Private cString   := "ZA4"
+    Private cFiltro   := ""      
+    private  _nLin	  := 0050 
+
+    //bitmaps
+    PRIVATE oOk 	:= LoadBitmap( GetResources(), "LBOK")
+    PRIVATE oNo 	:= LoadBitmap( GetResources(), "LBNO")
+    Private oMarkOk	:= LoadBitmap(GetResources(), "CHECKED") 
+    Private oMarkNo	:= LoadBitmap(GetResources(), "UNCHECKED")   
+    Private oAmar	:= LoadBitmap(GetResources(), "BR_AMARELO") 
+    Private oAzul 	:= LoadBitmap(GetResources(), "BR_AZUL")  
+    Private oVerd 	:= LoadBitmap(GetResources(), "BR_VERDE")
+    Private oVerm 	:= LoadBitmap(GetResources(), "BR_VERMELHO")     
+
+    //FONTES
+
+    Private oFont1 		:= TFont():New("Lucida Sans",,018,,.T.,,,,,.F.,.F.)
+    Private oFont2		:= TFont():New( "Courier New",,10,,.T.,,,,,.F. ) // NEGRITO
+    Private oFont3		:= TFont():New( "Courier New",,09,,.F.,,,,,.F. )
+    Private oFont4		:= TFont():New( "Courier New",,21,,.T.,,,,,.F. ) // NEGRITO
+    Private oFont5		:= TFont():New( "Courier New",,28,,.F.,,,,,.F. )
+    Private oFont6		:= TFont():New( "Courier New",,16,,.T.,,,,,.F. ) // NEGRITO
+    Private oFont7		:= TFont():New( "Courier New",,18,,.T.,,,,,.F. ) // NEGRITO
+
+    Private oFont8		:= TFont():New( "Times New Roman",,10,,.T.,,,,.T.,.F. ) // NEGRITO
+    Private oFont9		:= TFont():New( "Times New Roman",,14,,.T.,,,,.T.,.F. ) // NEGRITO
+    Private oFont10		:= TFont():New( "Times New Roman",,11,,.F.,,,,,.F. )
+    Private oFont11		:= TFont():New( "Times New Roman",,10,,.F.,,,,.T.,.F. ) 
+    Private oFont12		:= TFont():New( "Times New Roman",,11,,.T.,,,,.T.,.F. ) // NEGRITO
+    Private oFont13		:= TFont():New( "Times New Roman",,08,,.F.,,,,.T.,.F. ) // NEGRITO   
+    Private oFont14		:= TFont():New("MS Sans Serif",,018,,.F.,,,,,.F.,.F.)     
+
+
+    aAdd(aRotina,{"Pesquisar"	,"AxPesqui"		,0,1, 0, .T.})
+    aAdd(aRotina,{"Visualizar"	,"u_xCgsTela"	,0,2, 0, NIL})
+    aAdd(aRotina,{"Mont.D.Carga","u_xCgsTela"	,0,3, 0, NIL})
+    aAdd(aRotina,{"Processos"	,aRotina1   	,0,7, 0, NIL}) 
+    aAdd(aRotina,{"Relatorios"	,aRotina2   	,0,7, 0, NIL}) 
+//    aAdd(aRotina,{"Liberações"	,aRotina3   	,0,7, 0, NIL})
+
+    aAdd(aRotina,{"Aglutina.Carga"	,"u_xCgUnifica"	,0,7, 0, NIL})
+//    aAdd(aRotina,{"Desmonte"	,"u_Desmont"	,0,7, 0, NIL})
+    aAdd(aRotina,{"Cancelar"	,"u_xCargaExcl"	,0,5, 0, NIL})
+    aAdd(aRotina,{"Exc.Pedido"	,"u_xPedExcl"	,0,7, 0, NIL})
+    aAdd(aRotina,{"Legenda"		,"U_xCgsLeg"	,0,7, 0, .f.})
+    aadd(aRotina,{'NFE Sefaz'   ,'SPEDNFE()' , 0 , 6,0,NIL})
+    aAdd(aRotina,{"Boletos"		,aRotina4       ,0,7, 0, NIL})
+    aAdd(aRotina,{"Libera Carga"		,"U_xLibCar"       ,0,7, 0, NIL}) 
+//    aAdd(aRotina,{"Etiquetas"	,"U_EtqZebra"   ,0,7, 0, NIL})
+    aAdd(aRotina,{"Alterar Transportador","U_AltVeic"    ,0,7, 0, NIL})
+
+    aAdd(aRotina,{"Rotas de Entrega","U_xCgsRota"   ,0,7, 0, NIL})
+    
+
+    //aAdd(aRotina1,{"Env.Confe"	,"U_xCargaCon"	,0,7, 0, NIL})   
+    //aAdd(aRotina1,{"Lib.Exped"	,"U_xCarga_Exp"  ,0,7, 0, NIL}) 
+    aAdd(aRotina1,{"Expedição"	,"u_xCgsExped"   ,0,7, 0, NIL})   
+    aAdd(aRotina1,{"Prep.Docs"	,"U_xCgsFatAuto"   ,0,7, 0, NIL})   
+    aAdd(aRotina1,{"Entregas"	,"U_xCgsEntrega"   ,0,7, 0, NIL}) 
+    aAdd(aRotina1,{"Finaliza"	,"U_xCargaFin"   ,0,7, 0, NIL}) 
+    aAdd(aRotina1,{"Dados.Entr.","U_xDadEnt"   ,0,7, 0, NIL}) 
+
+    aAdd(aRotina2,{"Separacao"	,"U_RCargaMSP"   ,0,7, 0, NIL}) 
+  //  aAdd(aRotina2,{"Romaneio"	,"U_XROMANEIO"   ,0,7, 0, NIL}) 
+  //  aAdd(aRotina2,{"Acom.Entre"	,"U_XENTREGAS"   ,0,7, 0, NIL}) 
+    aAdd(aRotina2,{"Romaneio"	,"U_XPRECONROM"   ,0,7, 0, NIL}) 
+ //   aAdd(aRotina2,{"Capa.Entre.","U_FSR101"		 ,0,7, 0, NIL})
+
+    //aAdd(aRotina3,{"Credito"	,"Ma450ClAut"   ,0,7, 0, NIL}) 
+    //aAdd(aRotina3,{"Estoque"	,"A455LibAut"   ,0,7, 0, NIL})  
+
+    aAdd(aRotina4,{"Bradesco"	,"U_Bradesco(Danfe,nString)"   ,0,7, 0, NIL}) 
+    aAdd(aRotina4,{"Brasil"	    ,"U_BLTCDFL()"   ,0,7, 0, NIL}) 
+    aAdd(aRotina4,{"Itau"	    ,"U_BLTITAU(__cNotFis)"   ,0,7, 0, NIL})  
+    aAdd(aRotina4,{"Santander"	,"U_BOLSANT()"   ,0,7, 0, NIL})  
+
+
+
+    aAdd(aCores, { "ZA4_STATUS == 'A' ", 'BR_VERDE'})
+    aAdd(aCores, { "ZA4_STATUS == 'C' ", "BR_AMARELO"})
+    aAdd(aCores, { "ZA4_STATUS == 'L' ", "BR_AZUL"})
+    aAdd(aCores, { "ZA4_STATUS == 'F' ", "BR_PRETO"})
+    aAdd(aCores, { "ZA4_STATUS == 'E' ", "BR_MARROM"}) 
+    aAdd(aCores, { "ZA4_STATUS == 'P' ", "BR_PINK"})
+    aAdd(aCores, { "ZA4_STATUS == 'T' ", "BR_VERMELHO"})  
+    aAdd(aCores, { "ZA4_STATUS == 'Z' ", "BR_BRANCO"})
+    aAdd(aCores, { "ZA4_STATUS == '1' ", "BR_CANCEL"})     
+
+    VldPergCarga(padr("xCargas",10))
+    SetKey(VK_F12,{|| xCargParm()})
+
+
+    dbSelectArea("ZA4")
+    dbSetOrder(1)
+    mBrowse(,,,,cString,,,,,,aCores,,,,,,,,cFiltro) 
+    SetKey(VK_F12,Nil)
+ 
+Return()    
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡…o    ³ AjustaSX1   ³ Autor ³ Lucas Pereira      ³ Data ³ 19/05/14 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡…o ³ Ajustar as perguntas no SX1.					              ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe   ³ AjustaSX1		                                          ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ RGPR01, Localizacoes...                                    ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+static function xCargParm()
+    local rArea := Getarea()
+    Pergunte("xCargas",.T.)
+    restarea(rArea)
+return()
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡…o    ³ AjustaSX1   ³ Autor ³ Lucas Pereira      ³ Data ³ 19/05/14 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡…o ³ Ajustar as perguntas no SX1.					              ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe   ³ AjustaSX1		                                          ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ RGPR01, Localizacoes...                                    ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+
+
+Static Function VldPergCarga(cPerg)
+    LOCAL aRegs 	:= {}
+    LOCAL aAreaOld 	:= GetArea()
+    Local nX        := 0 
+
+
+    AADD(aRegs,{"Agrup. de Rotas ?"	,"Agrup. de Rotas ?","Agrup. de Rotas ?","mv_ch01","C", 3,0,0,"G",""  ,"mv_par01",""		     ,""		   ,""            ,"" ,"",""				  ,""				,""			   ,"","",""  	   ,""	   ,""	  ,"","",""})
+    AADD(aRegs,{"Ordena Rotas?"		,"Ordena Rotas?"	,"Ordena Rotas?"	,"mv_ch02","N", 1,0,0,"C",""  ,"mv_par02","Codigo"		 ,""		   ,""            ,"" ,"","Alfabetica"				  ,""				,""			   ,"","",""  	   ,""	   ,""	  ,"","",""})
+    AADD(aRegs,{"Emissao NF?"		,"Emissao NF?"	    ,"Emissao NF?"	    ,"mv_ch03","N", 1,0,0,"C",""  ,"mv_par03","Lindoia"		 ,""		   ,""            ,"" ,"","SBC"				  ,""				,""			   ,"","","Todos"  	   ,""	   ,""	  ,"","",""})
+    AADD(aRegs,{"Tipo Frete?"       ,"Tipo Frete??"     ,"Tipo Frete??"     ,"mv_ch04","N", 1,0,0,"C",""  ,"mv_par04","CIF"	         ,""		   ,""            ,"" ,"","FOB"		          ,""				,""			   ,"","","Todos"  	   ,""	   ,""	  ,"","",""})
+    AADD(aRegs,{"Data Entrega De"   ,"Data Entrega De"  ,"Data Entrega De"  ,"mv_ch05","D", 8,0,0,"G",""  ,"mv_par05","",""             ,""            ,"" ,"","",""                      ,""                ,""             ,"","",""        ,""       ,""     ,"","",""})
+    AADD(aRegs,{"Data Entrega Até"  ,"Data Entrega Até" ,"Data Entrega Até" ,"mv_ch06","D", 8,0,0,"G",""  ,"mv_par06","",""             ,""            ,"" ,"","",""                      ,""                ,""             ,"","",""        ,""       ,""     ,"","",""})
+
+    dbSelectArea("SX1")
+    dbSetOrder(1)
+    For nX:=1 to Len(aRegs)
+        If !(dbSeek(cPerg+StrZero(nx,2)))
+            RecLock("SX1",.T.)
+            Replace X1_GRUPO    with cPerg
+            Replace X1_ORDEM   	with StrZero(nx,2)
+            Replace x1_pergunt	with aRegs[nx][01]
+            Replace x1_perspa   with aRegs[nx][02]
+            Replace x1_pereng   with aRegs[nx][03]
+            Replace x1_variavl	with aRegs[nx][04]
+            Replace x1_tipo		with aRegs[nx][05]
+            Replace x1_tamanho	with aRegs[nx][06]
+            Replace x1_decimal	with aRegs[nx][07]
+            Replace x1_presel   with aRegs[nx][08]
+            Replace x1_gsc      with aRegs[nx][09]
+            Replace x1_valid    with aRegs[nx][10]
+            Replace x1_var01    with aRegs[nx][11]
+            Replace x1_def01    with aRegs[nx][12]
+            Replace x1_defspa1	with aRegs[nx][13]
+            Replace x1_defeng1	with aRegs[nx][14]
+            Replace x1_cnt01    with aRegs[nx][15]
+            Replace x1_var02    with aRegs[nx][16]
+            Replace x1_def02    with aRegs[nx][17]
+            Replace x1_defspa2	with aRegs[nx][18]
+            Replace x1_defeng2	with aRegs[nx][19]
+            Replace x1_cnt02    with aRegs[nx][20]
+            Replace x1_var03    with aRegs[nx][21]
+            Replace x1_def03    with aRegs[nx][22]
+            Replace x1_defspa3	with aRegs[nx][23]
+            Replace x1_defeng3	with aRegs[nx][24]
+            Replace x1_f3     	with aRegs[nx][25]
+            Replace x1_grpsxg 	with aRegs[nx][26]
+            Replace x1_def04 	with aRegs[nx][27]
+                
+            MsUnlock()
+        Endif
+    Next
+
+    RestArea( aAreaOld )
+return()    
+
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡…o    ³ AjustaSX1   ³ Autor ³ Lucas Pereira      ³ Data ³ 19/05/14 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡…o ³ Ajustar as perguntas no SX1.					              ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe   ³ AjustaSX1		                                          ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ RGPR01, Localizacoes...                                    ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+
+
+user Function xCgUnifica()
+    local rArea := Getarea()
+    PRIVATE cCgCodOrig := ZA4->ZA4_CODCAR
+    PRIVATE cCgNomOrig := ZA4->ZA4_NOME
+    PRIVATE cCgCodDest := space(6)
+    PRIVATE cCgNomDest := ""
+
+
+    DEFINE MSDIALOG oDlgRotPed TITLE "Aglutinação de Cargas" FROM 000, 000  TO 180, 500 COLORS 0, 16777215 PIXEL
+        
+        @ 002, 005 GROUP oGroup1 TO 030, 246 PROMPT "Carga Origem?" OF oDlgRotPed COLOR 0, 16777215 PIXEL
+        @ 012, 011 MSGET oCgCodOrig VAR cCgCodOrig SIZE 060, 010 OF oDlgRotPed COLORS 0, 16777215 PIXEL WHEN .F.
+        @ 012, 072 MSGET oCgNomOrig VAR cCgNomOrig SIZE 170, 010 OF oDlgRotPed COLORS 0, 16777215 PIXEL WHEN .F.
+        
+        @ 032, 005 GROUP oGroup1 TO 060, 246 PROMPT "Carga Destino?" OF oDlgRotPed COLOR 0, 16777215 PIXEL
+        @ 042, 011 MSGET oCgCodDest VAR cCgCodDest SIZE 060, 010 OF oDlgRotPed COLORS 0, 16777215 PIXEL F3 "ZA4" valid gatCgDest() 
+        @ 042, 072 MSGET oCgNomDest VAR cCgNomDest SIZE 170, 010 OF oDlgRotPed COLORS 0, 16777215 PIXEL WHEN .F.
+         
+        @ 063, 207 BUTTON oButton1 PROMPT "Fecha" SIZE 037, 012 OF oDlgRotPed PIXEL action oDlgRotPed:end()
+        @ 063, 165 BUTTON oButton1 PROMPT "Aglutina" SIZE 037, 012 OF oDlgRotPed PIXEL action Aglutina()    
+
+    ACTIVATE MSDIALOG oDlgRotPed CENTERED
+
+    restarea(rArea)
+return
+
+
+
+user Function xCgsLeg()
+
+    Local aLegenda	 := {}
+
+        aAdd(aLegenda,{"BR_VERDE"	    	,'EM SEPARACAO'})
+        aAdd(aLegenda,{"BR_AMARELO"		    ,'EM CONFERENCIA'})    
+        aAdd(aLegenda,{"BR_AZUL"		    ,'CONFERIDA E AGUARDANDO EXPEDIÇÃO'})  
+        aAdd(aLegenda,{"BR_MARROM"	   		,'EXPEDIDA E AGUARDANDO FATURAMENTO'}) 
+        aAdd(aLegenda,{"BR_PRETO"		    ,'FATURADA'})  
+        aAdd(aLegenda,{"BR_PINK"	   		,'ENTREGA PARCIAL'})  
+        aAdd(aLegenda,{"BR_VERMELHO"   		,'FINALIZADA'})  
+        aAdd(aLegenda,{"BR_BRANCO"   		,'CANCELADA'})
+        aAdd(aLegenda,{"BR_CANCEL"   		,'BLOQUEADA'}) 
+
+    BrwLegenda('Montagem de Cargar','Montagem de Cargar', aLegenda )
+
+Return .T.
+
+
+
+
+/*/{Protheus.doc} nomeFunction
+    (long_description)
+    @type  Function
+    @author user
+    @since 21/03/2025
+    @version version
+    @param param_name, param_type, param_descr
+    @return return_var, return_type, return_description
+    @example
+    (examples)
+    @see (links_or_references)
+    /*/
+user Function xLibCar()
+
+
+    Local 	cCadastro  	:= OemToAnsi("Essa rotina tem como função liberar a carga bloqueada.")
+    Local 	aSays      	:= {}
+    Local 	aButtons   	:= {}
+    Local 	nOpca    	:= 0
+    local cUserLibLog   := SUPERGETMV("X_LIBFRT",.T.,"000000")
+
+
+	IF RetCodUsr() $ cUserLibLog 
+
+        AAdd(aSays,cCadastro)
+
+        AAdd(aButtons, { 1,.T.,{|| nOpca := 1,FechaBatch() }} )
+        AAdd(aButtons, { 2,.T.,{|| nOpca := 0,FechaBatch() }} )
+
+        FormBatch( cCadastro, aSays, aButtons )
+        
+        IF nOpca = 1
+            IF ZA4->ZA4_STATUS ="1"
+                RecLock("ZA4",.F.)
+                ZA4->ZA4_STATUS := "A"
+                MsUnlock()
+                msginfo("Carga Liberada!")
+            else
+                msginfo("Carga não esta bloqueada!")
+            EndIf
+        Endif
+    else
+        msginfo("Usuario sem permissao para liberacao, verifique no configurador o parametro - X_LIBFRT ")
+    endif
+Return ()
+
+
+//--------------------------------------------------------------------------------------------------------------------------------
+
+static function Aglutina()
+/*
+    if Posicione("ZA4",1,xFilial("ZA4")+cCgCodOrig,"ZA4_STATUS") <> Posicione("ZA4",1,xFilial("ZA4")+cCgCodDest,"ZA4_STATUS")
+        msginfo("Operação nao peermitida! Verifique o status das cargas! Necessário deixar as duas cargas com o mesmo status!")
+        RETURN()
+    ENDIF 
+*/
+    if ZA4->ZA4_STATUS <> 'A'
+        msginfo("Operação nao peermitida! Verifique o status da carga!")
+        RETURN()
+    ENDIF
+
+    BEGINSQL alias "TMPAGL"
+        SELECT * ,
+				SC5.R_E_C_N_O_ AS RECSC5
+        FROM %TABLE:SC5% SC5
+        WHERE SC5.%NOTDEL%
+            AND C5_FILIAL = %exp:ZA4->ZA4_FILIAL%
+            AND C5_XCARGA = %EXP:cCgCodOrig%
+    ENDSQL
+    WHILE TMPAGL->(!EOF())
+
+        DBSELECTAREA("SC5") 
+        SC5->(dbgoto(TMPAGL->RECSC5))
+        RECLOCK("SC5",.F.)
+            C5_XCARGA := cCgCodDest
+        MSUNLOCK()
+
+        TMPAGL->(DBSKIP())
+    ENDDO
+    TMPAGL->(DBCLOSEAREA())
+
+/*
+    //QUERY PARA CARGAS FATURADAS
+    BEGINSQL alias "TMPAGL"
+        SELECT * ,
+				ZA5.R_E_C_N_O_ AS RECZA5
+        FROM %TABLE:ZA5% ZA5
+        WHERE ZA5.%NOTDEL%
+            AND ZA5_FILIAL = %exp:ZA4->ZA4_FILIAL%
+            AND ZA5_CODCAR = %EXP:cCgCodOrig%
+    ENDSQL
+    WHILE TMPAGL->(!EOF())
+
+        DBSELECTAREA("ZA5") 
+        ZA5->(dbgoto(TMPAGL->RECZA5))
+        RECLOCK("ZA5",.F.)
+            ZA5_CODCAR := cCgCodDest
+        MSUNLOCK()
+
+        TMPAGL->(DBSKIP())
+    ENDDO
+    TMPAGL->(DBCLOSEAREA())
+*/
+
+    nPedidos	:= ZA4->ZA4_NROPED
+    nTotPLiq	:= ZA4->ZA4_TOTPLI
+    nTotPBru	:= ZA4->ZA4_TOTPBR
+    nTotVolu	:= ZA4->ZA4_TOTVOL
+    nTotGera	:= ZA4->ZA4_TOTAL
+    nTotFre     := ZA4->ZA4_TOTFRT
+
+    DBSELECTAREA("ZA4")
+    IF ZA4->(DBSETORDER(1),DBSEEK(XFILIAL("ZA4")+cCgCodOrig)) 
+        RECLOCK("ZA4",.F.)
+            DbDelete()
+        MSUNLOCK()  
+    ENDIF
+
+    IF ZA4->(DBSETORDER(1),DBSEEK(XFILIAL("ZA4")+cCgCodDest))
+        RECLOCK("ZA4",.F.)
+            ZA4_NROPED   += nPedidos
+            ZA4_TOTPLI	 += nTotPLiq
+            ZA4_TOTPBR	 += nTotPBru
+            ZA4_TOTVOL   += nTotVolu
+            ZA4_TOTAL	 += nTotGera
+            ZA4_TOTFRT   += nTotFre
+        MSUNLOCK()
+    ENDIF
+    msginfo("Carga aglutinada com sucesso! ")
+
+return()
+
+
+
+
+
+user function xCargaExcl() 
+
+    local rArea 	:= getarea() 
+    local cCodCarg  := ZA4->ZA4_CODCAR
+    local nOpca 
+    local aSays 	:= {}
+    local aButtons  := {}
+    local cCadastro := "Cancelamento de Cargas"
+    local lPossuiNF := .F.
+
+    AAdd(aSays,OemToAnsi( "  Este programa tem como objetivo cancelar cargas"))
+
+    AAdd(aButtons, { 1,.T.,{|| nOpca := 1,FechaBatch() }} )
+    AAdd(aButtons, { 2,.T.,{|| nOpca := 0,FechaBatch() }} )
+
+    FormBatch( cCadastro, aSays, aButtons )  
+    
+    cQuery := " 	SELECT C5_NUM, C5_NOTA, C5_SERIE  FROM "+retsqlname("SC5")
+    cQuery += " 	WHERE C5_XCARGA = '"+cCodCarg+"'" 
+    cQuery += " 	AND D_E_L_E_T_ <> '*'    AND C5_FILIAL = '"+XFILIAL("SC5")+"'"
+
+    cQuery := ChangeQuery(cQuery)
+    dbUseArea(.T.,"TOPCONN",TcGenQry(,,cQuery),"TMP",.T.,.T.)  
+    WHILE TMP->(!EOF())  
+        IF !EMPTY(TMP->C5_NOTA)
+            lPossuiNF := .T.
+        ENDIF
+        TMP->(DBSKIP())
+    ENDDO 
+
+    if nOpca   == 1   
+
+        if  lPossuiNF                             	
+            msginfo("Impossivel cancelar carga!"+chr(13)+chr(10)+"Existem Notas Fiscais nao canceladas"+chr(13)+chr(10)+"Verifique!")
+            TMP->(DBCLOSEAREA()) 
+            restarea(rArea)
+            RETURN()
+        ENDIF
+
+        if msgyesno("Deseja realmente CANCELAR a carga e liberar os pedidos para novo cadastro?")             
+            
+            DBSELECTAREA("ZA4") 
+            RECLOCK("ZA4",.F.)
+                    ZA4_STATUS := 'Z'
+            MSUNLOCK()   
+            TMP->(dbgotop())
+            WHILE TMP->(!EOF())
+                DBSELECTAREA("SC5") 
+                dbsetorder(1)
+                dbseek(xfilial("SC5")+TMP->C5_NUM )
+                RECLOCK("SC5",.F.)  
+                    C5_VEICULO  := ' '
+                    C5_XCARGA   := ' '
+                    C5_XDTCARG  := stod(' ')
+                MSUNLOCK() 
+            TMP->(DBSKIP())
+            ENDDO    
+            MSGINFO("Carga "+cCodCarg+" Cancelada com SUCESSO!") 
+        endif
+    endif    
+    TMP->(DBCLOSEAREA()) 
+    restarea(rArea)
+return()
+
+
+
+
+STATIC FUNCTION gatCgDest()
+
+        cCgNomDest := Posicione("ZA4",1,xFilial("ZA4")+ cCgCodDest,"ZA4_NOME")
+
+return .T.
+
+
+
+
+user function xPedExcl()
+    local rArea 	:= getarea() 
+    local cCodCarg  := ZA4->ZA4_CODCAR   
+    local nOpca 
+    local aSays 	:= {}
+    local aButtons  := {}
+    local cCadastro := "Excluir Pedidos da Carga"
+    local aPedidos  := {}
+
+    AAdd(aSays,OemToAnsi( "  Este programa tem como objetivo Excluir Pedidos das cargas"))
+
+    AAdd(aButtons, { 1,.T.,{|| nOpca := 1,FechaBatch() }} )
+    AAdd(aButtons, { 2,.T.,{|| nOpca := 0,FechaBatch() }} )
+
+    FormBatch( cCadastro, aSays, aButtons )  
+
+
+/*
+    if ! ZA4->ZA4_STATUS $ 'PFT'
+        msginfo("Operação nao peermitida! Verifique o status da carga!")
+        RETURN()
+    ENDIF
+*/
+    if nOpca == 1
+    
+        cQuery := " SELECT ZA5_PEDIDO, " 
+        cQuery += " 	ZA5_CLIENT,"
+        cQuery += " 	A1_NOME,   "
+        cQuery += " 	ZA5_NFISCA,   "
+        cQuery += "     ZA5_CODCAR, "
+        cQuery += " 	ZA5_SERIE   "
+        
+        cQuery += " 	FROM "+RETSQLNAME("ZA5")+" ZA5 "
+        cQuery += " INNER JOIN "+RETSQLNAME("SA1")+" SA1 ON A1_COD = ZA5_CLIENT AND A1_LOJA = ZA5_LOJA AND SA1.D_E_L_E_T_ <> '*'  "
+        cQuery += " 	WHERE ZA5_CODCAR = '"+cCodCarg+"'"
+        cQuery += " 	AND ZA5_FILIAL = '"+XFILIAL("ZA5")+"'"
+        cQuery += " 	AND ZA5.D_E_L_E_T_ <> '*'  " 
+        cQuery += " ORDER BY ZA5_PEDIDO "
+        
+        cQuery := ChangeQuery(cQuery)
+        dbUseArea(.T.,"TOPCONN",TcGenQry(,,cQuery),"TMP",.T.,.T.) 
+        
+        
+        WHILE TMP->(!EOF())  
+            AADD(aPedidos,{.F.,TMP->ZA5_PEDIDO, TMP->ZA5_CLIENT, TMP->A1_NOME, TMP->ZA5_NFISCA, TMP->ZA5_SERIE, TMP->ZA5_CODCAR })
+            TMP->(DBSKIP())
+        ENDDO      
+        
+
+        DEFINE MSDIALOG oDlg TITLE "Exclusao de Pedidos" FROM 000, 000  TO 400, 700 COLORS 0, 16777215 PIXEL
+        
+            @ 004, 003 GROUP oGroup1 TO 180, 345 PROMPT "Pedidos em carga" OF oDlg COLOR 0, 16777215 PIXEL
+            @ 011, 007 LISTBOX oPedidos Fields HEADER "x","Numero","Cliente","Nome","Nota","Serie" SIZE 332, 163 OF oDlg PIXEL ColSizes 50,50
+            oPedidos:SetArray(aPedidos)
+            oPedidos:bLine := {|| {;
+            iif(aPedidos[oPedidos:nAt,1],oOk,oNo),;
+            aPedidos[oPedidos:nAt,2],;
+            aPedidos[oPedidos:nAt,3],;
+            aPedidos[oPedidos:nAt,4],;
+            aPedidos[oPedidos:nAt,5],;
+            aPedidos[oPedidos:nAt,6];
+            }}
+            
+            
+            @ 183, 307 BUTTON oButton1 PROMPT "Sair" SIZE 037, 012 OF oDlg PIXEL   action oDlg:end()
+            @ 183, 266 BUTTON oButton2 PROMPT "Excluir" SIZE 037, 012 OF oDlg PIXEL action 	Processa({|| ExcluiPed(aPedidos) },"Exclusao de pedidos") 
+            oPedidos:bLDblClick := {|| aPedidos[oPedidos:nAt,1] := !aPedidos[oPedidos:nAt,1],;
+            oPedidos:DrawSelect()}
+        ACTIVATE MSDIALOG oDlg CENTERED
+        
+    endif  
+    TMP->(DBCLOSEAREA())
+    restarea(rArea)
+Return() 
+
+static function ExcluiPed(aPedidos)  
+    local x
+    local nPesoBru := 0
+    local nTotal   := 0 
+    local nNroPed  := 0
+    local nVolume  := 0  
+    local cPedEcxl := "" 
+
+    if len(aPedidos) == 1  
+        msginfo("Rota com apenas 1 pedido. Execute a rotina Cancelamento de Cargas")
+        return()
+    endif
+
+    procregua(len(aPedidos))  
+    FOR X:=1 TO LEN(aPedidos)
+        incproc() 
+        IF aPedidos[X,1]  
+            if SF2->(DBSETORDER(1),DBSEEK(XFILIAL("SF2")+aPedidos[X,5]+aPedidos[X,6])) 
+                if validSd1Dev(XFILIAL("SF2"),aPedidos[X,5],aPedidos[X,6])
+                    if !msgyesno("Pedido Nº "+aPedidos[X,2]+ " com nota fiscal de devolução. Deseja continnuar?")
+                        return()
+                    endif
+                else
+                    msginfo("Pedido Nº "+aPedidos [X,2]+ " ainda possui nota fiscal válida. Verifique!")
+                    return()
+                endif
+            ENDIF
+
+
+            IF SC5->(DBSETORDER(1),	DBSEEK(XFILIAL("SC5")+aPedidos[X,2]) )
+                RecLock("SC5", .F.)
+                    SC5->C5_XCARGA := " "
+                MsUnLock()
+            else
+                msginfo("Pedido Nº "+aPedidos [X,2]+ " Nao localizado. Verifique!")
+            endif
+
+
+            dbselectarea("ZA5")
+            DBSETORDER(1)
+            DBSEEK(XFILIAL("ZA5")+aPedidos[X,7]+aPedidos[X,2]) 
+            if found()     
+                cPedEcxl += aPedidos[X,2] + chr(10)+chr(13)    
+                nPesoBru := ZA5->ZA5_PESOBR
+                nTotal   := ZA5->ZA5_VLRNF 
+                nVolume  := ZA5->ZA5_QTDVOL
+                nTotFre  := ZA5->ZA5_TOTFRE
+                RecLock("ZA5", .F.)
+                    dbDelete()
+                MsUnLock()
+            
+            
+                dbselectarea("ZA4")
+                DBSETORDER(1)
+                DBSEEK(XFILIAL("ZA4")+aPedidos[X,7])	
+                If found()
+                    RecLock("ZA4", .F.)
+                        ZA4_TOTPBR := ZA4_TOTPBR - nPesoBru
+                        ZA4_TOTAL  := ZA4_TOTAL   - nTotal
+                        ZA4_TOTVOL := ZA4_TOTVOL - nVolume
+                        ZA4_NROPED := ZA4_NROPED - 1
+                        ZA4_TOTFRT := ZA4_TOTFRT - nTotFre
+                    MsUnLock()
+                endif		 
+            endif 				
+        ENDIF
+    NEXT X 
+    if empty(cPedEcxl)
+        msginfo("Nenhum pedido selecionado")  
+    else
+        msginfo(cPedEcxl+"Pedidos Excluidos")  
+    endif
+    oDlg:end()
+    return()    
+
+
+    static function validSd1Dev(cFil,cDoc,cSerir)
+    local lArea := getarea()
+    local lRet  := .f.  
+    
+    cQuery := "	SELECT COUNT() AS NRO FROM SD1010 WHERE D1_FILIAL+D1_NFORI+D1_SERIORI =  '"+cFil+cDoc+cSerir+"' and D_E_L_E_T_ <> ''  "
+    cQuery := ChangeQuery(cQuery)
+    dbUseArea(.T.,"TOPCONN",TcGenQry(,,cQuery),"TM1",.T.,.T.)  
+
+    IF !EMPTY(TM1->NRO)
+        lRet := .T.
+    ENDIF
+
+    TM1->(DBCLOSEAREA()) 
+    restarea(lArea)
+return(lRet)
+
+
+
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡…o    ³ AjustaSX1   ³ Autor ³ Julio Cesar      ³ Data ³ 23/05/2019 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡…o ³ Ajustar as perguntas no SX1.					              ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe   ³ AjustaSX1		                                          ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ RGPR01, Localizacoes...                                    ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+
+
+user function AltVeic()
+	local aArea 	:= getArea()
+	local cVeiculo 	:= ZA4->ZA4_VEICUL	 
+	local oDlgVei
+	DEFINE MSDIALOG oDlgVei TITLE "Alteração de Veiculo" FROM 000, 000  TO 100, 250 COLORS 0, 16777215 PIXEL
+     
+		@ 005, 15 SAY oSayC01 PROMPT "Selecione um novo veiculo para a carga" SIZE 200, 008 OF oDlgVei COLORS 0, 16777215 PIXEL
+		@ 015, 15 MSGET oVeiculo VAR cVeiculo SIZE 050, 012 OF oDlgVei COLORS 0, 16777215 PIXEL F3 "DA3"
+		
+		@ 36,  50 BUTTON oButton5 PROMPT "Cancelar" SIZE 035, 012 OF oDlgVei PIXEL   ACTION oDlgVei:end()
+		@ 36,  90 BUTTON oButton6 PROMPT "Confirma" SIZE 035, 012 OF oDlgVei PIXEL   ACTION processa({||AltVeiculo(cVeiculo)})  
+	    
+	ACTIVATE MSDIALOG oDlgVei CENTERED    
+	restArea(aArea)
+return()
+
+static function AltVeiculo(cVeiculo)
+
+
+        local cAlias1 := getNextAlias()
+        
+        if !msgYesNo('Confirma atualização do veículo para '+cVeiculo+'?', 'Carga: '+ZA4->ZA4_CODCAR)
+            msgInfo('Cancelado')
+            return
+        endif
+        conout("[xCargas]===============================================================\\")
+        conout("[xCargas] "+dtoc( Date() )+" "+Time()+" Alterando Carga: "+ZA4->ZA4_CODCAR)
+
+        //Grava o novo veículo na carga
+        RecLock('ZA4', .F.)
+            ZA4->ZA4_VEICUL := cVeiculo
+        MSUNLOCK()
+
+        //Busca todos os pedidos contidos na carga
+        beginSQL Alias cAlias1
+            SELECT SC5.R_E_C_N_O_ as C5REC, SF2.R_E_C_N_O_ AS F2REC FROM %table:SC5% sc5
+            
+            LEFT JOIN %table:SF2% SF2
+            ON F2_DOC = C5_NOTA
+            AND F2_SERIE = C5_SERIE
+            AND SF2.%notdel%
+            AND C5_NOTA <> ''
+            AND C5_FILIAL = F2_FILIAL
+
+            WHERE SC5.%notdel%
+            AND C5_FILIAL = %exp:ZA4->ZA4_FILIAL%	
+            AND C5_XCARGA = %exp:ZA4->ZA4_CODCAR%
+        endsql
+        //Atualiza o veiculo em todos os pedidos da carga
+        
+        dbSelectArea('SC5')
+        dbSelectArea('SF2')
+        
+        while (cAlias1)->(!eof())
+            SC5->(dbGoTo((cAlias1)->C5REC))
+            conout("[xCargas] "+dtoc( Date() )+" "+Time()+" Alterando Pedido: "+SC5->C5_NUM)
+            RecLock('SC5', .F.)
+                SC5->C5_VEICULO := cVeiculo
+                SC5->C5_TRANSP := cVeiculo
+            msUnlock()
+            
+            if !empty((cAlias1)->F2REC)
+                SF2->(dbGoTo((cAlias1)->F2REC))
+                RecLock('SF2', .F.)
+                    SF2->F2_VEICUL1 := cVeiculo
+                    SF2->F2_TRANSP := cVeiculo
+                msUnlock()
+                conout("[xCargas] "+dtoc( Date() )+" "+Time()+" Alterando Nota Fiscal: "+SF2->(F2_DOC+' '+F2_SERIE))
+            endif
+            (cAlias1)->(dbSkip())
+        enddo
+        
+        msgInfo('Alteração realizada.')
+
+return()

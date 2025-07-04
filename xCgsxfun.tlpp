@@ -21,21 +21,21 @@
 
 user function xCgsProxNum()  
 LOCAL rArea	    := getarea()
-local cCod 		:= GETSXENUM("SZ6","Z6_CODCARG") 
+local cCod 		:= GETSXENUM("ZA4","ZA4_CODCAR") 
 local lExist 	:= .T. 	 
 LOCAL cTabela	:= GetNextAlias()
 
 WHILE lExist
 	BEGINSQL ALIAS cTabela
-		SELECT Z6_CODCARG FROM %TABLE:SZ6%
-		WHERE %NOTDEL% AND Z6_CODCARG = %EXP:cCod% AND Z6_FILIAL = %EXP:XFILIAL('SZ6')%
+		SELECT ZA4_CODCAR FROM %TABLE:ZA4%
+		WHERE %NOTDEL% AND ZA4_CODCAR = %EXP:cCod% AND ZA4_FILIAL = %EXP:XFILIAL('ZA4')%
 	ENDSQL
 	IF (cTabela)->(EOF())
 		lExist := .F. 
 	ELSE 
 		ConfirmSX8()
 		lExist 	:= .T.
-		cCod 	:= GETSXENUM("SZ6","Z6_CODCARG") 
+		cCod 	:= GETSXENUM("ZA4","ZA4_CODCAR") 
 	ENDIF
 	(cTabela)->(dbclosearea())
 ENDDO
@@ -63,6 +63,7 @@ user function xCgsbloqPed(nPedido,cFil)
 	LOCAL blqEst 
 	LOCAL BlqCre 
 	local cRet
+	local cStsPed := POSICIONE("SC5",1,cFil + nPedido,"C5_XSTATUS")
 
 	//Verifica credito
 	cQuery := " select DISTINCT "
@@ -101,10 +102,25 @@ user function xCgsbloqPed(nPedido,cFil)
 	if BlqCre == 'C'
 		cRet := BlqCre
 	elseif blqEst == 'E'
-		cRet := blqEst  
+		cRet := blqEst 
+	elseif cStsPed == 'C'
+		cRet :=  'A' //STATUS A RETORNA COMERCIAL, PORQUE O "C" JA É BLOQUEIO DE CREDITO
+	elseif cStsPed == 'T'
+		cRet :=  'T'
+	elseif cStsPed == 'F'
+		cRet :=  'F'
+	elseif cStsPed == 'L'
+		cRet :=  'B' //STATUS B RETORNA LOGISTICA, PORQUE O "L" JA É LIBERADO POR PADRÃO XCARGAS
+	elseif cStsPed == 'K'
+		cRet :=  'K'
+	elseif cStsPed == 'N' 
+		cRet :=  'L'
+	elseif cStsPed == 'O' 
+		cRet :=  'L' // LIBERADO MAS NAO IMPRESSO
 	else
 		cRet := 'L'
 	endif
+	
 
 RETURN(cRet) 
 
@@ -130,7 +146,8 @@ User function xCgsCalcTPed(nOpc,nPedido,cFil)
 	cQuery := " SELECT  SUM(C6_VALOR) AS VALOR, "
 	cQuery += " 		SUM(B1_PESO*C6_QTDVEN) AS PESOL, "
 	cQuery += " 		SUM(B1_PESBRU*C6_QTDVEN) AS PESOB, " 
-	cQuery += " 		SUM(C6_QTDVEN*B5_COMPRLC*B5_LARGLC*B5_ALTURLC) AS CUBAGEM "
+	cQuery += " 		SUM(C6_QTDVEN*B5_COMPRLC*B5_LARGLC*B5_ALTURLC) AS CUBAGEM, "
+	cQuery += "			SUM(CAST(B1_QNTPAL AS float)*CAST(B1_PLTTRU AS float)*C6_QTDVEN) AS QTDEPALETE "
 	cQuery += " from "+RETSQLNAME("SC6")+" SC6 "  
 	cQuery += " LEFT JOIN "+RETSQLNAME("SB5")+" SB5 ON B5_COD = C6_PRODUTO AND SB5.D_E_L_E_T_  <> '*' AND B5_FILIAL = C6_FILIAL "
 	cQuery += " INNER JOIN "+RETSQLNAME("SB1")+" SB1 ON B1_COD = C6_PRODUTO AND SB1.D_E_L_E_T_ <> '*' "
@@ -151,6 +168,8 @@ User function xCgsCalcTPed(nOpc,nPedido,cFil)
 			cRet := ROUND(TMP->PESOB,2)  
 		elseif nOpc == 4 //peso bruto
 			cRet := ROUND(TMP->CUBAGEM,3)
+		elseif nOpc == 5 //QTDEPALETE
+			cRet := ROUND(TMP->QTDEPALETE,3)
 		endif
 	TMP->(dbclosearea())
 
@@ -163,7 +182,7 @@ RETURN(cRet)
 ±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
 ±±³Fun‡…o    ³ xCargas      ³ Autor ³ Lucas Pereira      ³ Data ³ 19/05/15 ³±±
 ±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
-±±³Descri‡…o ³ Ajustar as perguntas no SX1.					              ³±±
+±±³Descri‡…o ³ Ajustar as perguntas no SX1.					              ³±±'
 ±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
 ±±³Sintaxe   ³ AjustaSX1		                                          ³±±
 ±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
@@ -194,6 +213,16 @@ user function xCgsCalcArmPed(nPedido,cFil)
 
 RETURN(cRet) 
 
+
+user Function xCgsFrtTot()
+	
+	local lret := .T.
+
+	M->ZA4_TOTFRT := M->ZA4_FRETE + M->ZA4_DESCAR
+
+	oCgTela:refresh()
+
+Return lret
 
 
 
