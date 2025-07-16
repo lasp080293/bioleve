@@ -1,0 +1,26 @@
+{
+	"version": "0.2.2",
+	"includes": [
+		""
+	],
+	"permissions": {
+		"authorizationtoken": ""
+	},
+	"connectedServer": {},
+	"configurations": [
+		{
+			"id": "w0601jsvebmcovm1z04u8ttqask8l",
+			"type": "totvs_server_protheus",
+			"name": "bioleve_xcargas",
+			"port": 1330,
+			"address": "192.168.0.4",
+			"buildVersion": "",
+			"secure": 0,
+			"includes": [
+				"C:\\Users\\lasp_\\OneDrive - PARTNERS RL SOLUÇÕES\\24-06-20-P12_INCLUDES"
+			]
+		}
+	],
+	"savedTokens": [],
+	"lastConnectedServer": ""
+}

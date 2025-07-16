@@ -69,40 +69,34 @@ User Function xCgsCad()
     aAdd(aRotina,{"Mont.D.Carga","u_xCgsTela"	,0,3, 0, NIL})
     aAdd(aRotina,{"Processos"	,aRotina1   	,0,7, 0, NIL}) 
     aAdd(aRotina,{"Relatorios"	,aRotina2   	,0,7, 0, NIL}) 
-//    aAdd(aRotina,{"Liberações"	,aRotina3   	,0,7, 0, NIL})
+
 
     aAdd(aRotina,{"Aglutina.Carga"	,"u_xCgUnifica"	,0,7, 0, NIL})
-//    aAdd(aRotina,{"Desmonte"	,"u_Desmont"	,0,7, 0, NIL})
+
     aAdd(aRotina,{"Cancelar"	,"u_xCargaExcl"	,0,5, 0, NIL})
     aAdd(aRotina,{"Exc.Pedido"	,"u_xPedExcl"	,0,7, 0, NIL})
     aAdd(aRotina,{"Legenda"		,"U_xCgsLeg"	,0,7, 0, .f.})
     aadd(aRotina,{'NFE Sefaz'   ,'SPEDNFE()' , 0 , 6,0,NIL})
     aAdd(aRotina,{"Boletos"		,aRotina4       ,0,7, 0, NIL})
     aAdd(aRotina,{"Libera Carga"		,"U_xLibCar"       ,0,7, 0, NIL}) 
-//    aAdd(aRotina,{"Etiquetas"	,"U_EtqZebra"   ,0,7, 0, NIL})
+
     aAdd(aRotina,{"Alterar Transportador","U_AltVeic"    ,0,7, 0, NIL})
 
     aAdd(aRotina,{"Rotas de Entrega","U_xCgsRota"   ,0,7, 0, NIL})
     
 
-    //aAdd(aRotina1,{"Env.Confe"	,"U_xCargaCon"	,0,7, 0, NIL})   
-    //aAdd(aRotina1,{"Lib.Exped"	,"U_xCarga_Exp"  ,0,7, 0, NIL}) 
+
     aAdd(aRotina1,{"Expedição"	,"u_xCgsExped"   ,0,7, 0, NIL})   
     aAdd(aRotina1,{"Prep.Docs"	,"U_xCgsFatAuto"   ,0,7, 0, NIL})   
     aAdd(aRotina1,{"Entregas"	,"U_xCgsEntrega"   ,0,7, 0, NIL}) 
     aAdd(aRotina1,{"Finaliza"	,"U_xCargaFin"   ,0,7, 0, NIL}) 
     aAdd(aRotina1,{"Dados.Entr.","U_xDadEnt"   ,0,7, 0, NIL}) 
 
+
     aAdd(aRotina2,{"Separacao"	,"U_RCargaMSP"   ,0,7, 0, NIL}) 
-  //  aAdd(aRotina2,{"Romaneio"	,"U_XROMANEIO"   ,0,7, 0, NIL}) 
-  //  aAdd(aRotina2,{"Acom.Entre"	,"U_XENTREGAS"   ,0,7, 0, NIL}) 
     aAdd(aRotina2,{"Romaneio"	,"U_XPRECONROM"   ,0,7, 0, NIL}) 
- //   aAdd(aRotina2,{"Capa.Entre.","U_FSR101"		 ,0,7, 0, NIL})
 
-    //aAdd(aRotina3,{"Credito"	,"Ma450ClAut"   ,0,7, 0, NIL}) 
-    //aAdd(aRotina3,{"Estoque"	,"A455LibAut"   ,0,7, 0, NIL})  
-
-    aAdd(aRotina4,{"Bradesco"	,"U_Bradesco(Danfe,nString)"   ,0,7, 0, NIL}) 
+    aAdd(aRotina4,{"Bradesco"	,"U_Bradesco(nil,nil)"   ,0,7, 0, NIL}) 
     aAdd(aRotina4,{"Brasil"	    ,"U_BLTCDFL()"   ,0,7, 0, NIL}) 
     aAdd(aRotina4,{"Itau"	    ,"U_BLTITAU(__cNotFis)"   ,0,7, 0, NIL})  
     aAdd(aRotina4,{"Santander"	,"U_BOLSANT()"   ,0,7, 0, NIL})  
